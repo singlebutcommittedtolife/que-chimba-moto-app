@@ -1,0 +1,25 @@
+[{
+  "_id": {
+    "$oid": "66e718da30e25a520124ba22"
+  },
+  "user": {
+    "id": "507f1f77bcf86cd799439011",
+    "name": "Juan",
+    "lastName": "Pérez",
+    "email": "juan.perez@example.com",
+    "cellphone": "+573001234567",
+    "documentType": "CC",
+    "documentNumber": "1234567890",
+    "address": {
+      "street": "Calle 123 # 45-67",
+      "city": "Bogotá",
+      "department": "Cundinamarca",
+      "postalCode": "110111",
+      "country": "Colombia"
+    },
+    "registryDate": {
+      "$date": "2023-09-15T14:30:00.000Z"
+    },
+    "registryUser": "admin"
+  }
+}]

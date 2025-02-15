@@ -1,0 +1,33 @@
+// server/app.js
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const app = express();
+const clientRoutes = require('./routes/client'); // Asegúrate de que la ruta es correcta
+const ticketPurchaseRoutes= require('./routes/ticketPurchase');
+const raffleRoutes= require('./routes/raffle');
+const transactionRoutes= require('./routes/transaction');
+
+// Configurar CORS para permitir que el frontend se comunique con el backend
+app.use(cors());
+
+// Middleware para manejar JSON
+app.use(express.json());
+
+
+// Conectar a MongoDB (cambia la URL por la de tu base de datos)
+mongoose.connect('mongodb://localhost:27017/queChimbaMoto', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch(err => console.error('Error al conectar a MongoDB', err));
+
+// Configurar el puerto
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
+
+app.use(clientRoutes);  // Esta línea monta las rutas de cliente
+app.use(ticketPurchaseRoutes);  // Esta línea monta las rutas de cliente
+app.use(raffleRoutes);  // Esta línea monta las rutas de rifas
+app.use(transactionRoutes);  // Esta línea monta las rutas de rifas
+

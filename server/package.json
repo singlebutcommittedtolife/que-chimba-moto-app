@@ -1,0 +1,28 @@
+{
+  "name": "backend-server",
+  "version": "1.0.0",
+  "description": "Backend de la aplicación para la gestión de datos y API.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "backend-server": "file:",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "mongoose": "^6.13.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "ISC",
+  "keywords": [],
+  "author": ""
+}
