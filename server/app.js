@@ -16,7 +16,7 @@ app.use(express.json());
 
 
 // Conectar a MongoDB (cambia la URL por la de tu base de datos)
-mongoose.connect('mongodb://localhost:27017/queChimbaMoto', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://quechimbamoto:gOAXx2JGpS4pV3rt@cluster0.00p1o.mongodb.net/queChimbaMoto?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Conectado a MongoDB'))
   .catch(err => console.error('Error al conectar a MongoDB', err));
 
