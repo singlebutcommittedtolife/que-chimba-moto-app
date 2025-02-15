@@ -4,6 +4,10 @@
 /node_modules
 /server/node_modules
 /client/node_modules
+/server/.npmrc
+/server/.npmrc
+/client/.npmrc
+/client/.npmrc
 
 /.pnp
 .pnp.js
@@ -24,3 +28,5 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+server/package-lock.json
+client/package-lock.json
