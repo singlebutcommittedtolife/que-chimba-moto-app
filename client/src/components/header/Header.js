@@ -17,7 +17,6 @@ const Header = () => {
           
           <nav className="hidden md:flex space-x-8 justify-center flex-grow">
           <Link to="/" className="hover:bg-blue-600 font-semibold py-2 px-4 rounded transition duration-300">Inicio</Link>
-            <Link to="/contacto" className="hover:bg-blue-600  font-semibold py-2 px-4 rounded transition duration-300">Contacto</Link>
           </nav>
           
           
@@ -37,7 +36,6 @@ const Header = () => {
           <Link to="/" className="bg-yellow-500 text-black px-4 py-2 transition duration-300 ">Inicio</Link>
           <Link to="/como-funciona" className="block py-2 hover:text-blue-200 transition duration-300">Cómo Funciona</Link>
           <Link to="/ganadores" className="block py-2 hover:text-blue-200 transition duration-300">Ganadores</Link>
-          <Link to="/contacto" className="block py-2 hover:text-blue-200 transition duration-300">Contacto</Link>
         </div>
       )}
     </div>
