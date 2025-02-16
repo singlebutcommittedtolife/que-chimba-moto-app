@@ -19,7 +19,7 @@ export const createTransaction = async ({ totalAmount, customerEmail, paymentTok
 
 export const validateTransactionOnServer = async (transactionId) => {
   try {
-    const response = await axios.get(`${API_URL}/status/${transactionId}`);
+    const response = await axios.post(`${API_URL}/status/${transactionId}`);
     return response.data;
   } catch (error) {
     console.error("Error al validar la transacción en Wompi:", error);
