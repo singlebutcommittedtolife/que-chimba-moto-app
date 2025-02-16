@@ -82,7 +82,7 @@ router.post('/create-transaction', async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.WOMPI_API_KEY}`, // Llave privada desde variables de entorno
+          Authorization: `Bearer ${process.env.REACT_APP_WOMPI_API_KEY}`, // Llave privada desde variables de entorno
         },
       }
     );
@@ -105,7 +105,7 @@ router.post('/create-transaction/status/:transactionId', async (req, res) => {
   try {
     const response = await axios.get(`https://sandbox.wompi.co/v1/transactions/${req.params.transactionId}`, {
       headers: {
-        Authorization: `Bearer ${process.env.WOMPI_PRIVATE_KEY}`, // Llave privada de Wompi
+        Authorization: `Bearer ${process.env.REACT_APP_WOMPI_PRIVATE_KEY}`, // Llave privada de Wompi
       },
     });
 
@@ -142,7 +142,7 @@ const getAcceptanceToken = async () => {
   try {
     const response = await axios.get(merchantEndpoint, {
       headers: {
-        Authorization: `Bearer ${process.env.WOMPI_API_KEY}`, // Llave privada
+        Authorization: `Bearer ${process.env.REACT_APP_WOMPI_API_KEY}`, // Llave privada
       },
     });
 
@@ -158,7 +158,7 @@ const getAcceptanceToken = async () => {
 // Ruta del Webhook
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const signature = req.headers['x-wompi-signature']; // Firma enviada por Wompi
-  const secret = process.env.WOMPI_PRIVATE_KEY; // Llave privada para validación
+  const secret = process.env.REACT_APP_WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
 
   try {
     const body = req.body; // Payload enviado por Wompi
