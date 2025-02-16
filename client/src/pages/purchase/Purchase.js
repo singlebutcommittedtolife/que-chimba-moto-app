@@ -300,9 +300,9 @@ const Purchase = () => {
 
       <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-center mb-6">Compra de Tickets</h1>
-      <div className="flex flex-col lg:flex-row gap-8">
-{/* Formulario de Datos Personales */}
-<form onSubmit={handleSubmit} className="lg:w-1/2 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div className="flex flex-col lg:flex-row lg:space-x-6">
+      {/* Formulario de Datos Personales */}
+      <form onSubmit={handleSubmit} className="order-2 lg:order-1 lg:w-1/2 bg-white shadow-md rounded px-8 pt-6 pb-8">  
       <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
             Nombre
@@ -438,7 +438,7 @@ const Purchase = () => {
         </div>
       </form>
       {/* Lista de Rifas Seleccionadas */}
-      <div className="lg:w-1/2 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
+      <div className="order-1 lg:order-2 lg:w-1/2 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
       <h2 className="text-xl font-bold mb-4">Tus Fondos Seleccionados</h2>
       {selectedRaffles.map((raffle) => (
           <div key={raffle.id} className="flex items-center justify-between mb-4">
