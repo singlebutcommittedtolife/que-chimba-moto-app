@@ -212,7 +212,7 @@ const Purchase = () => {
     });
 };
   const processPaymentWithWompi = () => {
-    console.log("Bienvenida hija")
+    console.log("Bienvenida processPaymentWithWompi")
     return new Promise((resolve, reject) => {
       const checkout = new window.WidgetCheckout({
         currency: "COP",
@@ -220,7 +220,7 @@ const Purchase = () => {
         reference: `transaction-${Date.now()}`,
         publicKey:publicKey// Llave pública de Sandbox
       });
-      console.log("Bienvenida hija 2")
+      console.log("Bienvenida processPaymentWithWompi 2")
   
       checkout.open(async (result) => {
         const transaction = result.transaction;
