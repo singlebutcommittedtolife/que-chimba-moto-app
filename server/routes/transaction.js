@@ -82,7 +82,7 @@ router.post('/create-transaction', async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.REACT_APP_WOMPI_PRIVATE_KEY}`, // Llave privada desde variables de entorno
+          Authorization: `Bearer ${process.env.REACT_APP_WOMPI_API_KEY}`, // Llave privada desde variables de entorno
         },
       }
     );
@@ -105,7 +105,7 @@ router.post('/create-transaction/status/:transactionId', async (req, res) => {
   try {
     const response = await axios.get(`https://sandbox.wompi.co/v1/transactions/${req.params.transactionId}`, {
       headers: {
-        Authorization: `Bearer prv_test_7osNFnqf1xHMiLYHDjWTIeitDoXOvl1j`, // Llave privada de Wompi
+        Authorization: `Bearer ${process.env.REACT_APP_WOMPI_API_KEY}`, // Llave privada de Wompi
       },
     });
 
