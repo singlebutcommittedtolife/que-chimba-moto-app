@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/clients'; // URL base de la API de clientes
+const API_URL = 'https://que-chimba-moto-app-production.up.railway.app/clients'; // URL base de la API de clientes
 
 // Crear un nuevo cliente
 export const createClient = async (clientData) => {

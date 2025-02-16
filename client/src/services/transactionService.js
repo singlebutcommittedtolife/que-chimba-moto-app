@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = '/api/create-transaction';
+const API_URL = 'https://que-chimba-moto-app-production.up.railway.app/create-transaction';
 
 export const createTransaction = async ({ totalAmount, customerEmail, paymentToken }) => {
   try {

@@ -3,7 +3,7 @@ const router = express.Router();
 const Raffle = require('../models/Raffle');
 
 // Obtener todas las rifas
-router.get('/api/raffles', async (req, res) => {
+router.get('/raffles', async (req, res) => {
     try {
       const raffles = await Raffle.find();
       res.json(raffles);
@@ -13,7 +13,7 @@ router.get('/api/raffles', async (req, res) => {
   });
   
   // Obtener una rifa por ID
-  router.get('/api/raffles/:statusRaffle', async (req, res) => {
+  router.get('/raffles/:statusRaffle', async (req, res) => {
     try {
       const raffle = await Raffle.findOne({ status: req.params.statusRaffle });
       if (!raffle) return res.status(404).json({ message: 'Rifa no encontrada' });

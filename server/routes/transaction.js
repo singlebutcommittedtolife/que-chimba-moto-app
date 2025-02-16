@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
 
 
 // Ruta para crear transacciones
-router.post('/api/create-transaction', async (req, res) => {
+router.post('/create-transaction', async (req, res) => {
   const { totalAmount, customerEmail, paymentToken } = req.body;
 
   // Validaciones iniciales
@@ -101,7 +101,7 @@ router.post('/api/create-transaction', async (req, res) => {
   }
 });
 
-router.post('/api/create-transaction/status/:transactionId', async (req, res) => {
+router.post('/create-transaction/status/:transactionId', async (req, res) => {
   try {
     const response = await axios.get(`https://sandbox.wompi.co/v1/transactions/${req.params.transactionId}`, {
       headers: {
@@ -156,7 +156,7 @@ const getAcceptanceToken = async () => {
 
 
 // Ruta del Webhook
-router.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const signature = req.headers['x-wompi-signature']; // Firma enviada por Wompi
   const secret = process.env.WOMPI_PRIVATE_KEY; // Llave privada para validación
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/ticket'; // URL base de la API de clientes
+const API_URL = 'https://que-chimba-moto-app-production.up.railway.app/ticket'; // URL base de la API de clientes
 
 // Crear un nuevo ticket purchase
 export const generateTicket = async (ticketPurchaseData) => {

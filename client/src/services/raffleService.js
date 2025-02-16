@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api'; // URL base de la API de clientes
+const API_URL = 'https://que-chimba-moto-app-production.up.railway.app'; // URL base de la API de clientes
 
 // Obetener el listado de raffles
 export const getRaffles = async () => {

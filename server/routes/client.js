@@ -3,7 +3,7 @@ const router = express.Router();
 const Client = require('../models/Client');
 
 // Ruta para crear un nuevo cliente
-router.post('/api/clients', async (req, res) => {
+router.post('/clients', async (req, res) => {
     try {
       const newClient = new Client(req.body);
       await newClient.save();

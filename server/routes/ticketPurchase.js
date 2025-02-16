@@ -51,7 +51,7 @@ function generarNumeroAleatorio() {
 
 
 // Ruta para generar un ticket y guardarlo
-router.post('/api/ticket/generate-ticket', async (req, res) => {
+router.post('/ticket/generate-ticket', async (req, res) => {
   try {
     let raffleNumber;
     let exists = true;
