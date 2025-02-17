@@ -231,6 +231,9 @@ const Purchase = () => {
           // Validar la transacción en el servidor
           try {
             const isValid = await validateTransactionOnServer(transaction.id); // Método para validar en tu backend
+
+            console.log("Transacción aprobada en Wompi isValid:", transaction);
+
             if (isValid) {
               resolve(transaction); // Transacción confirmada
             } else {
