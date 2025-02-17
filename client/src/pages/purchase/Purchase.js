@@ -236,6 +236,8 @@ const Purchase = () => {
 
             if (isValid) {
               resolve(transaction); // Transacción confirmada
+              console.log("Transacción confirmada isValid:", transaction);
+
             } else {
               reject(new Error("Validación fallida en el servidor"));
             }
