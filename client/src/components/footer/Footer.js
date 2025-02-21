@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import TermsModal from "./termsModal/TermsModal";
 
 const Footer = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <footer className="bg-teal-800 text-white">
       <div className="container mx-auto px-6 py-10">
@@ -10,8 +13,13 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-2">Enlaces Rápidos</h4>
             <ul className="text-sm">
-              <li><Link to="/terminos" className="hover:text-blue-300">Términos y Condiciones</Link></li>
+              <button onClick={() => setIsModalOpen(true)} className="terms-btn text-sm">
+                Términos y Condiciones
+              </button>
+                <TermsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             </ul>
+
+            
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-2">Contacto</h4>

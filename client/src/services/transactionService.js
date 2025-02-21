@@ -19,6 +19,7 @@ export const createTransaction = async ({ totalAmount, customerEmail, paymentTok
 
 export const validateTransactionOnServer = async (transactionId) => {
   try {
+    console.log("validateTransactionOnServer 1"+transactionId)
     const response = await axios.post(`${API_URL}/status/${transactionId}`);
     return response.data;
   } catch (error) {

@@ -222,6 +222,7 @@ const Purchase = () => {
       });
       console.log("Bienvenida processPaymentWithWompi 2")
   
+      //Modal Finalizar mi proceso
       checkout.open(async (result) => {
         const transaction = result.transaction;
   
