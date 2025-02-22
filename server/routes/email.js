@@ -5,7 +5,7 @@ const router = express.Router();
 router.post('/email/send', async (req, res) => {
   try {
     const { to, subject, text, html } = req.body;
-
+    console.log("server "+to)
     if (!to || !subject || (!text && !html)) {
       return res.status(400).json({ success: false, message: 'Faltan datos requeridos' });
     }
