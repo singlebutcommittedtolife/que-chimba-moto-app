@@ -7,6 +7,8 @@ import { generateTicket } from '../../services/ticketPurchaseService';
 import { getActiveRaffle } from '../../services/raffleService';  
 import { createTransaction } from '../../services/transactionService';  
 import { validateTransactionOnServer } from '../../services/transactionService';  
+import { sendMail } from '../../services/emailService';  
+
 
 const Purchase = () => {
 
@@ -224,6 +226,7 @@ const Purchase = () => {
   
       //Modal Finalizar mi proceso
       checkout.open(async (result) => {
+        console.log(result);
         const transaction = result.transaction;
   
         if (transaction.status === "APPROVED") {
@@ -234,7 +237,7 @@ const Purchase = () => {
             const isValid = await validateTransactionOnServer(transaction.id); // Método para validar en tu backend
 
             console.log("Transacción aprobada en Wompi isValid:", transaction);
-
+            sendMail.sendMail("michellecaicedo.96@gmail.com","Pago Que Chimba Moto","","<h1>Hola!</h1><p>Este es un correo de prueba con formato HTML.</p>");
             if (isValid) {
               resolve(transaction); // Transacción confirmada
               console.log("Transacción confirmada isValid:", transaction);
