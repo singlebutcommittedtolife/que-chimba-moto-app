@@ -238,7 +238,7 @@ const Purchase = () => {
             text:"rrer",
             html:"<h1>Hola!</h1><p>Este es un correo de prueba con formato HTML.</p>"
           });
-          console.log("Michelle 2" +emailInfo.to )
+          alert("Michelle 2" +emailInfo.to )
           const sendMailRes = await sendMail(emailInfo);
           console.log(sendMailRes);
           // Validar la transacción en el servidor
