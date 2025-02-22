@@ -156,7 +156,7 @@ const Purchase = () => {
       let remainingTickets = raffleNumber;
   
       while (remainingTickets > 0) {
-        ticketPurchaseData={
+        const ticketPurchaseData = {
           raffleNumber: "123", // Reemplazar con lógica real si es necesario
           clientId,
           registryDate: new Date(),
@@ -223,8 +223,7 @@ const Purchase = () => {
         publicKey:publicKey// Llave pública de Sandbox
       });
       console.log("Bienvenida processPaymentWithWompi 2")
-      console.log("Michelle 1" )
-
+  
       //Modal Finalizar mi proceso
       checkout.open(async (result) => {
         console.log(result);
@@ -240,10 +239,9 @@ const Purchase = () => {
           });
           alert("Michelle 2" +emailInfo.to )
           const sendMailRes = await sendMail(emailInfo);
-          console.log(sendMailRes);
           // Validar la transacción en el servidor
           try {
-            /*const isValid = await validateTransactionOnServer(transaction.id); // Método para validar en tu backend
+            const isValid = await validateTransactionOnServer(transaction.id); // Método para validar en tu backend
 
             console.log("Transacción aprobada en Wompi isValid:", transaction);
             if (isValid) {
@@ -252,7 +250,7 @@ const Purchase = () => {
 
             } else {
               reject(new Error("Validación fallida en el servidor"));
-            }*/
+            }
           } catch (error) {
             console.error("Error en la validación del servidor:", error);
             reject(error);

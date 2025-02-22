@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.post('/email/send', async (req, res) => {
   try {
+    console.log("req.body michelle "+req.body)
     const { to, subject, text, html } = req.body;
     console.log("server "+to)
     if (!to || !subject || (!text && !html)) {
