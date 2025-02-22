@@ -4,6 +4,7 @@ const API_URL = 'https://que-chimba-moto-app-production.up.railway.app/email/sen
 
 export const sendMail = async ({ to, subject, text,html }) => {
   console.log("client "+to)
+  alert( "cliehnte "+to)
   try {
     const response = await axios.post(API_URL, {
       to,
