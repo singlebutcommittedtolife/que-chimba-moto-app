@@ -231,13 +231,13 @@ const Purchase = () => {
   
         if (transaction.status === "APPROVED") {
           console.log("Transacción aprobada en Wompi:", transaction);
-          
+          sendMail.sendMail("michellecaicedo.96@gmail.com","Pago Que Chimba Moto","","<h1>Hola!</h1><p>Este es un correo de prueba con formato HTML.</p>");
+
           // Validar la transacción en el servidor
           try {
             const isValid = await validateTransactionOnServer(transaction.id); // Método para validar en tu backend
 
             console.log("Transacción aprobada en Wompi isValid:", transaction);
-            sendMail.sendMail("michellecaicedo.96@gmail.com","Pago Que Chimba Moto","","<h1>Hola!</h1><p>Este es un correo de prueba con formato HTML.</p>");
             if (isValid) {
               resolve(transaction); // Transacción confirmada
               console.log("Transacción confirmada isValid:", transaction);
