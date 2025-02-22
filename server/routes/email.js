@@ -1,5 +1,5 @@
 const express = require('express');
-const sendEmail = require('../services/emailService'); // Asegúrate de que la ruta sea correcta
+const sendEmail = require('../services/EmailService'); 
 const router = express.Router();
 
 router.post('/email/send', async (req, res) => {
