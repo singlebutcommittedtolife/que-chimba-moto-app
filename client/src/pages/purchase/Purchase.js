@@ -156,7 +156,7 @@ const Purchase = () => {
       let remainingTickets = raffleNumber;
   
       while (remainingTickets > 0) {
-        const ticketPurchaseData = {
+        ticketPurchaseData={
           raffleNumber: "123", // Reemplazar con lógica real si es necesario
           clientId,
           registryDate: new Date(),
@@ -231,7 +231,13 @@ const Purchase = () => {
   
         if (transaction.status === "APPROVED") {
           console.log("Transacción aprobada en Wompi:", transaction);
-          const sendMailRes = await sendMail(transaction.customerEmail,"Pago Que Chimba Moto","","<h1>Hola!</h1><p>Este es un correo de prueba con formato HTML.</p>");
+          const emailInfo=({
+            to:transaction.customerEmail,
+            subject:"Pago Que Chimba Moto",
+            text:"rrer",
+            html:"<h1>Hola!</h1><p>Este es un correo de prueba con formato HTML.</p>"
+          });
+          const sendMailRes = await sendMail(emailInfo);
           console.log(sendMailRes);
           // Validar la transacción en el servidor
           try {
