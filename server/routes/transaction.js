@@ -106,12 +106,12 @@ router.post('/create-transaction/status/:transactionId', async (req, res) => {
     console.log("Hola create-transaction/status");
 
     console.log("test 1 "+req.params.transactionId);
-    console.log("test 2 "+process.env.REACT_APP_WOMPI_API_KEY);
+    console.log("test 2 "+process.env.REACT_APP_WOMPI_PRIVATE_KEY);
 
     const response = await axios.get(`https://sandbox.wompi.co/v1/transactions/${req.params.transactionId}`, {
       headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_WOMPI_API_KEY}`, // Llave privada de Wompi
-      },
+        Authorization: `Bearer pub_test_E6EA9xfY6lAKwms4el3457r0WZaGmT6L`, // Llave privada de Wompi
+      },  
     });
 
     const transaction = response.data.data;
