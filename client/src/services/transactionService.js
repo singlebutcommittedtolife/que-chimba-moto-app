@@ -14,13 +14,9 @@ export const createTransaction = async ( transaction) => {
 };
 
 
-export const updateTransaction = async ({ status, wompiTransactionId, updatedAt }) => {
-  try {
-    const response = await axios.post(API_URL.concat("update-transaction/:transacctionId"), {
-      status,
-      wompiTransactionId,
-      updatedAt,
-    });
+export const updateTransaction = async (transactionReference, updatedTransaction) => {  try {
+    const response = await axios.post(`${API_URL}update-transaction/${transactionReference}`,
+       updatedTransaction);
 
     return response.data; // Devuelve los datos de la transacción
   } catch (error) {

@@ -6,6 +6,9 @@ import { createClient } from '../../services/clientService';
 import { generateTicket } from '../../services/ticketPurchaseService';  
 import { getActiveRaffle } from '../../services/raffleService';  
 import { createTransaction } from '../../services/transactionService';  
+import { updateTransaction } from '../../services/transactionService';  
+
+
 import { validateTransactionOnServer } from '../../services/transactionService';  
 import { sendMail } from '../../services/emailService';  
 
@@ -367,21 +370,11 @@ const Purchase = () => {
 
   const updateTransactionRecord = async (transactionReference, updateData) => {
     try {
-      const response = await fetch(`/api/transactions/${transactionReference}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateData),
-      });
-  
-      if (!response.ok) {
-        throw new Error("Error al actualizar la transacción en la base de datos");
-      }
-  
-      console.log("Transacción actualizada en la base de datos:", updateData);
+      await updateTransaction(transactionReference,updateData);
+      console.log("Transacción actualizada:", transactionReference);
     } catch (error) {
       console.error("Error al actualizar la transacción:", error);
+      throw new Error("Error al actualizar la transacción");
     }
   };
 
