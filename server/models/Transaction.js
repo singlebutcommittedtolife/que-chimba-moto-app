@@ -12,6 +12,7 @@ const transactionSchema = new mongoose.Schema({
   },
   reference: {
     type: String,
+    unique: true,
     required: true
   },
   amount: {
@@ -36,7 +37,6 @@ const transactionSchema = new mongoose.Schema({
   },
   wompiTransactionId: {
     type: String,
-    unique: true,
     required: false,
   },
   updatedAt: {
