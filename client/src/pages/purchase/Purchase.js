@@ -217,7 +217,7 @@ const Purchase = () => {
 
 
 
-  const processPaymentWithWompi = async (customerId) => {
+  const processPaymentWithWompi2 = async (customerId) => {
     return new Promise(async (resolve, reject) => {
       const transactionReference = `transaction-${Date.now()}`;
   
@@ -240,6 +240,7 @@ const Purchase = () => {
         status: "CREATED", // Estado inicial antes de finalizar el pago
         createdAt: new Date(),
       };
+      console.log("createTransactionRecord",initialTransaction)
   
       try {
         await createTransactionRecord(initialTransaction);
@@ -272,6 +273,67 @@ const Purchase = () => {
       });
     });
   };
+
+  const processPaymentWithWompi = (totalAmount, publicKey, customerId, customerEmail) => {
+    console.log("Bienvenida processPaymentWithWompi");
+  
+    return new Promise(async (resolve, reject) => {
+      const transactionReference = `transaction-${Date.now()}`;
+  
+      // 1. Inicializar Wompi Checkout
+      const checkout = new window.WidgetCheckout({
+        currency: "COP",
+        amountInCents: totalAmount * 100,
+        reference: transactionReference,
+        publicKey: publicKey, // Llave pública de Wompi
+      });
+  
+      console.log("Bienvenida processPaymentWithWompi 2");
+  
+      // 2. Guardar la transacción en la base de datos antes de que el usuario finalice el pago
+      const initialTransaction = {
+        reference: transactionReference,
+        amount: totalAmount,
+        currency: "COP",
+        status: "CREATED", // Estado inicial antes de la confirmación del pago
+        customerId: customerId,
+        customerEmail: customerEmail,
+        createdAt: new Date(),
+      };
+  
+      try {
+        await createTransactionRecord(initialTransaction);
+        console.log("Transacción guardada en la base de datos.");
+      } catch (error) {
+        console.error("Error al guardar la transacción:", error);
+        return reject(error); // Si falla la creación, rechazamos la promesa
+      }
+  
+      // 3. Abrir el checkout para que el usuario ingrese sus datos y pague
+      checkout.open(async (result) => {
+        console.log("Resultado del pago:", result);
+  
+        const transaction = result.transaction;
+  
+        if (transaction.status === "APPROVED") {
+          console.log("Transacción aprobada en Wompi:", transaction);
+          // 5. Actualizar la transacción con el resultado final
+              await updateTransactionRecord(transactionReference, {
+                status: "APPROVED",
+                wompiTransactionId: transaction.id,
+                updatedAt: new Date(),
+              });
+  
+              resolve(transaction); // Transacción confirmada
+
+        } else {
+          console.error("Transacción rechazada o fallida:", transaction.status);
+          reject(new Error(`Transacción rechazada: ${transaction.status}`));
+        }
+      });
+    });
+  };
+  
   
   
   

@@ -2,12 +2,10 @@ import axios from 'axios';
 
 var API_URL = 'https://que-chimba-moto-app-production.up.railway.app/';
 
-export const createTransaction = async ({ totalAmount, customerEmail, paymentToken }) => {
+export const createTransaction = async ({ transaction}) => {
   try {
     const response = await axios.post(API_URL.concat("create-transaction"), {
-      totalAmount,
-      customerEmail,
-      paymentToken,
+      transaction
     });
 
     return response.data; // Devuelve los datos de la transacción
