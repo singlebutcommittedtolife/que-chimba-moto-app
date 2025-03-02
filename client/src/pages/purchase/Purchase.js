@@ -274,8 +274,8 @@ const Purchase = () => {
     });
   };
 
-  const processPaymentWithWompi = ( customerId ) => {
-    console.log("Bienvenida processPaymentWithWompi");
+  const processPaymentWithWompi = ( clientId,raffleId ) => {
+    console.log("Bienvenida processPaymentWithWompi"+clientId);
   
     return new Promise(async (resolve, reject) => {
       if (!window.WidgetCheckout) {
@@ -312,10 +312,11 @@ const Purchase = () => {
         console.log("Guardando transacción en la base de datos...");
         const initialTransaction = {
           reference: transactionReference,
-          amount: totalAmount,
+          amount: totalAmount* 100,
           currency: "COP",
-          status: "CREATED",
-          customerId: customerId,
+          status: "creada",
+          clientId: clientId,
+          raffleId:raffleId,
           createdAt: new Date(),
         };
   
@@ -333,11 +334,11 @@ const Purchase = () => {
 
               // 7️⃣ Actualizar la transacción con el resultado final
               await updateTransactionRecord(transactionReference, {
-                status: "APPROVED",
+                status: "completado",
                 wompiTransactionId: transaction.id,
                 updatedAt: new Date(),
               });
-  
+
               resolve(transaction);
         } else {
           console.error("Transacción rechazada o fallida:", transaction.status);
@@ -393,10 +394,10 @@ const Purchase = () => {
       const newClient = await createNewClient();
   
       // Paso 2: Generar tickets
-      await generateTicketsForClient(newClient._id);
-  
+      const ticket=await generateTicketsForClient(newClient._id);
+      console.log("response ticket  "+ticket)
       // Paso 3: Procesar pago con Wompi
-      const transaction = await processPaymentWithWompi(newClient._id);
+      const transaction = await processPaymentWithWompi(newClient._id,ticket.ticketNumber);
   
       await sendTransactionEmail(transaction);
   

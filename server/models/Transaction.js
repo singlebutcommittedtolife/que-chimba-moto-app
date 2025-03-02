@@ -10,7 +10,7 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  ticketId: {
+  reference: {
     type: String,
     required: true
   },
@@ -18,7 +18,7 @@ const transactionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Decimal128,
     required: true
   },
-  datePurchase: {
+  createdAt: {
     type: Date,
     required: true,
     default: Date.now
@@ -26,18 +26,24 @@ const transactionSchema = new mongoose.Schema({
   paymentMethod: {
     type: String,
     enum: ['tarjeta_credito', 'tarjeta_debito', 'paypal', 'transferencia'],
-    required: true
+    required: false
   },
-  statusPayment: {
+  status: {
     type: String,
-    enum: ['pendiente', 'completado', 'fallido', 'reembolsado'],
+    enum: ['creada', 'completado', 'fallido', 'reembolsado'],
     required: true,
-    default: 'pendiente'
+    default: 'creada'
   },
-  wompiReference: {
+  wompiTransactionId: {
     type: String,
-    unique: true
-  }
+    unique: true,
+    required: false,
+  },
+  updatedAt: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
 }, {
   timestamps: true
 });
