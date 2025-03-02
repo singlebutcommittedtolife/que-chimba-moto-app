@@ -213,73 +213,101 @@ const Purchase = () => {
       setLoading(false);
     });
 };
-  const processPaymentWithWompi = () => {
-    console.log("Bienvenida processPaymentWithWompi")
-    return new Promise((resolve, reject) => {
+
+
+
+
+  const processPaymentWithWompi = async (customerId) => {
+    return new Promise(async (resolve, reject) => {
+      const transactionReference = `transaction-${Date.now()}`;
+  
+      // 1. Inicializar Wompi Checkout
       const checkout = new window.WidgetCheckout({
         currency: "COP",
         amountInCents: totalAmount * 100,
-        reference: `transaction-${Date.now()}`,
-        publicKey:publicKey// Llave pública de Sandbox
+        reference: transactionReference,
+        clientId:customerId,
+        publicKey: publicKey, // Llave pública de Wompi
       });
-      console.log("Bienvenida processPaymentWithWompi 2")
   
-      //Modal Finalizar mi proceso
+      console.log("Checkout inicializado, ahora guardando la transacción en la base de datos...");
+  
+      // 2. Guardar la transacción en la base de datos antes de abrir el checkout
+      const initialTransaction = {
+        reference: transactionReference,
+        amount: totalAmount,
+        currency: "COP",
+        status: "CREATED", // Estado inicial antes de finalizar el pago
+        createdAt: new Date(),
+      };
+  
+      try {
+        await createTransactionRecord(initialTransaction);
+        console.log("Transacción guardada en la base de datos. Ahora abriendo el checkout...");
+      } catch (error) {
+        return reject(error); // Si falla la creación, rechazamos la promesa
+      }
+  
+      // 3. Ahora sí abrimos el checkout para que el usuario pague
       checkout.open(async (result) => {
-        console.log(result);
-        const transaction = result.transaction;
+        console.log("Resultado del pago:", result);
   
-        if (transaction.status === "APPROVED") {
-          console.log("Transacción aprobada en Wompi:", transaction);
-          const emailInfo=({
-            to:transaction.customerEmail,
-            subject:"Pago Que Chimba Moto",
-            text:"rrer",
-            html:"<h1>Hola!</h1><p>Este es un correo de prueba con formato HTML.</p>"
-          });
-          alert("Michelle 2" +emailInfo.to )
-          const sendMailRes = await sendMail(emailInfo);
-          // Validar la transacción en el servidor
+        if (result.transaction) {
+          const updatedTransaction = {
+            status: result.transaction.status,
+            wompiTransactionId: result.transaction.id,
+            updatedAt: new Date(),
+          };
+  
           try {
-            const isValid = await validateTransactionOnServer(transaction.id); // Método para validar en tu backend
-
-            console.log("Transacción aprobada en Wompi isValid:", transaction);
-            if (isValid) {
-              resolve(transaction); // Transacción confirmada
-              console.log("Transacción confirmada isValid:", transaction);
-
-            } else {
-              reject(new Error("Validación fallida en el servidor"));
-            }
+            // 4. Actualizar la transacción en la base de datos con el estado final
+            await updateTransactionRecord(transactionReference, updatedTransaction);
+            resolve(result.transaction);
           } catch (error) {
-            console.error("Error en la validación del servidor:", error);
             reject(error);
           }
         } else {
-          console.error("Transacción rechazada o fallida:", transaction.status);
-          reject(new Error(`Transacción rechazada: ${transaction.status}`));
+          reject({ error: "No se recibió información de Wompi", details: result });
         }
       });
     });
   };
   
   
+  
   const createTransactionRecord = async (transaction) => {
     try {
-      const transactionDetails = {
-        reference: `transaction-${transaction.registryDate}`,
-        name: formData.nombre,
-        totalAmount: totalAmount,
-        date: new Date(),
-      };
-  
-      await createTransaction(transactionDetails);
-      console.log("Transacción registrada:", transactionDetails);
+      await createTransaction(transaction);
+      console.log("Transacción registrada:", transaction);
     } catch (error) {
       console.error("Error al registrar la transacción:", error);
       throw new Error("Error al registrar la transacción");
     }
   };
+
+
+  const updateTransactionRecord = async (transactionReference, updateData) => {
+    try {
+      const response = await fetch(`/api/transactions/${transactionReference}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateData),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Error al actualizar la transacción en la base de datos");
+      }
+  
+      console.log("Transacción actualizada en la base de datos:", updateData);
+    } catch (error) {
+      console.error("Error al actualizar la transacción:", error);
+    }
+  };
+
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -293,10 +321,9 @@ const Purchase = () => {
       await generateTicketsForClient(newClient._id);
   
       // Paso 3: Procesar pago con Wompi
-      const transaction = await processPaymentWithWompi();
+      const transaction = await processPaymentWithWompi(newClient._id);
   
-      // Paso 4: Registrar transacción
-      await createTransactionRecord(transaction);
+      await sendTransactionEmail(transaction);
   
       // Redireccionar a la página de confirmación
       navigate("/confirmation", { state: { totalAmount } });
@@ -306,7 +333,27 @@ const Purchase = () => {
     }
   };
 
-  
+  const sendTransactionEmail = async (transaction) => {
+    console.log("sendEmal")
+    const emailInfo=({
+      to:transaction.customerEmail,
+      subject: "Confirmación de pago - Que Chimba Moto 🏍️",
+      text: `Hola ${transaction.customerName}, tu pago ha sido procesado correctamente.`,
+      html: `
+      <h1>¡Hola ${transaction.customerName}!</h1>
+      <p>Tu pago ha sido procesado correctamente.</p>
+      <p>Detalles de la transacción:</p>
+      <ul>
+        <li><strong>Monto:</strong> ${transaction.amount} COP</li>
+        <li><strong>Referencia:</strong> ${transaction.reference}</li>
+        <li><strong>Estado:</strong> ${transaction.status}</li>
+      </ul>
+      <p>Gracias por tu compra en <strong>Que Chimba Moto</strong> 🏍️</p>
+    `,
+    });
+     await sendMail(emailInfo);
+
+  }
 
   
   return (

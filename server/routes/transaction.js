@@ -51,55 +51,50 @@ router.post('/', async (req, res) => {
 
 // Ruta para crear transacciones
 router.post('/create-transaction', async (req, res) => {
-  const { totalAmount, customerEmail, paymentToken } = req.body;
+  const { reference,amount,currency,status, datePurchase, createdAt} = req.body;
 
-  // Validaciones iniciales
-  if (!totalAmount || !customerEmail || !paymentToken) {
-    return res.status(400).json({
-      error: true,
-      message: 'Faltan parámetros obligatorios: totalAmount, customerEmail o paymentToken',
-    });
-  }
+  const transaction = new Transaction({
+    reference,
+    amount,
+    currency,
+    status,
+    datePurchase,
+    createdAt
+  });
 
   // Endpoint de Wompi
-  const endpoint = 'https://sandbox.wompi.co/v1/transactions';
-
   try {
-    // Crear transacción en Wompi
-    const response = await axios.post(
-      endpoint,
-      {
-        amount_in_cents: totalAmount * 100, // Monto en centavos
-        currency: 'COP', // Moneda
-        customer_email: customerEmail, // Correo del cliente
-        payment_method: {
-          type: 'CARD',
-          token: paymentToken, // Token generado en el frontend
-          installments: 1, // Número de cuotas
-        },
-        reference: `transaction-${Date.now()}`, // Referencia única
-        acceptance_token: await getAcceptanceToken(), // Obtener el acceptance_token
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.REACT_APP_WOMPI_API_KEY}`, // Llave privada desde variables de entorno
-        },
-      }
-    );
-
-    // Responder al frontend con los datos de la transacción
-    res.status(200).json({
-      success: true,
-      data: response.data.data, // Los datos específicos de la transacción
-    });
+    const newTransaction = await transaction.save();
+    res.status(201).json(newTransaction);
   } catch (error) {
-    console.error('Error al crear la transacción:', error.response?.data || error.message);
-    res.status(500).json({
-      error: true,
-      message: error.response?.data || 'Error inesperado creando la transacción',
-    });
+    res.status(400).json({ message: error.message });
   }
 });
+
+// Ruta para crear transacciones
+router.put("/update-transaction/:reference", async (req, res) => {
+  try {
+    const { reference } = req.params;
+    const updateData = req.body; // Contiene los nuevos datos de la transacción (estado, wompiTransactionId, etc.)
+
+    // Buscar y actualizar la transacción en la base de datos
+    const updatedTransaction = await Transaction.findOneAndUpdate(
+      { reference }, // Buscar por referencia
+      { $set: updateData }, // Actualizar con los nuevos datos
+      { new: true } // Devolver la transacción actualizada
+    );
+
+    if (!updatedTransaction) {
+      return res.status(404).json({ error: "Transacción no encontrada" });
+    }
+
+    res.json({ message: "Transacción actualizada", transaction: updatedTransaction });
+  } catch (error) {
+    console.error("Error al actualizar la transacción:", error);
+    res.status(500).json({ error: "Error al actualizar la transacción", details: error });
+  }
+});
+
 
 router.post('/create-transaction/status/:transactionId', async (req, res) => {
   try {

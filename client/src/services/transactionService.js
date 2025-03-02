@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'https://que-chimba-moto-app-production.up.railway.app/create-transaction';
+var API_URL = 'https://que-chimba-moto-app-production.up.railway.app/';
 
 export const createTransaction = async ({ totalAmount, customerEmail, paymentToken }) => {
   try {
-    const response = await axios.post(API_URL, {
+    const response = await axios.post(API_URL.concat("create-transaction"), {
       totalAmount,
       customerEmail,
       paymentToken,
@@ -16,6 +16,23 @@ export const createTransaction = async ({ totalAmount, customerEmail, paymentTok
     throw error.response?.data || error.message; // Lanza el error para manejarlo en el frontend
   }
 };
+
+
+export const updateTransaction = async ({ status, wompiTransactionId, updatedAt }) => {
+  try {
+    const response = await axios.post(API_URL.concat("update-transaction/:transacctionId"), {
+      status,
+      wompiTransactionId,
+      updatedAt,
+    });
+
+    return response.data; // Devuelve los datos de la transacción
+  } catch (error) {
+    console.error('Error en updateTransaction:', error.response?.data || error.message);
+    throw error.response?.data || error.message; // Lanza el error para manejarlo en el frontend
+  }
+};
+
 
 export const validateTransactionOnServer = async (transactionId) => {
   try {
