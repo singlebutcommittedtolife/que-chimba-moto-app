@@ -274,7 +274,7 @@ const Purchase = () => {
     });
   };
 
-  const processPaymentWithWompi = (totalAmount, publicKey, customerId, customerEmail) => {
+  const processPaymentWithWompi = ( customerId) => {
     console.log("Bienvenida processPaymentWithWompi");
   
     return new Promise(async (resolve, reject) => {
@@ -297,7 +297,6 @@ const Purchase = () => {
         currency: "COP",
         status: "CREATED", // Estado inicial antes de la confirmación del pago
         customerId: customerId,
-        customerEmail: customerEmail,
         createdAt: new Date(),
       };
   
