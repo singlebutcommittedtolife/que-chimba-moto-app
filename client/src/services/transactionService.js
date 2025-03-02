@@ -2,7 +2,7 @@ import axios from 'axios';
 
 var API_URL = 'https://que-chimba-moto-app-production.up.railway.app/';
 
-export const createTransaction = async ({ transaction}) => {
+export const createTransaction = async ( transaction) => {
   try {
     const response = await axios.post(API_URL.concat("create-transaction"), {
       transaction
