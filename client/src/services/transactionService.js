@@ -4,9 +4,7 @@ var API_URL = 'https://que-chimba-moto-app-production.up.railway.app/';
 
 export const createTransaction = async ( transaction) => {
   try {
-    const response = await axios.post(API_URL.concat("create-transaction"), {
-      transaction
-    });
+    const response = await axios.post(API_URL.concat("create-transaction"), transaction );
 
     return response.data; // Devuelve los datos de la transacción
   } catch (error) {
