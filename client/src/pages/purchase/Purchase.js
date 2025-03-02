@@ -277,7 +277,7 @@ const Purchase = () => {
   };
 
   const processPaymentWithWompi = ( clientId,raffleId ) => {
-    console.log("Bienvenida processPaymentWithWompi"+clientId);
+    console.log("Bienvenida processPaymentWithWompi "+clientId);
   
     return new Promise(async (resolve, reject) => {
       if (!window.WidgetCheckout) {
@@ -321,7 +321,7 @@ const Purchase = () => {
           raffleId:raffleId,
           createdAt: new Date(),
         };
-        console.log("initialTransaction.."+initialTransaction);
+        console.log("initialTransaction..",initialTransaction);
 
         try {
           await createTransactionRecord(initialTransaction);
