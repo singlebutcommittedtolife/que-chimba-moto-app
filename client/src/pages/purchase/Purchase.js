@@ -321,7 +321,8 @@ const Purchase = () => {
           raffleId:raffleId,
           createdAt: new Date(),
         };
-  
+        console.log("initialTransaction.."+initialTransaction);
+
         try {
           await createTransactionRecord(initialTransaction);
           console.log("Transacción guardada en la base de datos.");
