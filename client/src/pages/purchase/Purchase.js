@@ -167,7 +167,9 @@ const Purchase = () => {
         console.log("Ticket Purchase creado:", newTicketPurchase);
   
         remainingTickets--;
+        return newTicketPurchase;
       }
+
     } catch (error) {
       console.error("Error al generar los tickets:", error);
       throw new Error("Error al generar los tickets");
