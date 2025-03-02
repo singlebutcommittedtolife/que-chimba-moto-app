@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
 // Ruta para crear transacciones
 router.post('/create-transaction', async (req, res) => {
   const { reference,amount,currency,status, customerId, createdAt} = req.body;
-
+console.log("req.body", req.body)
   const transaction = new Transaction({
     reference,
     amount,

@@ -20,7 +20,7 @@ const transactionSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    required: true,
+    required: false,
     default: Date.now
   },
   paymentMethod: {
@@ -41,7 +41,7 @@ const transactionSchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date,
-    required: true,
+    required: false,
     default: Date.now
   },
 }, {
