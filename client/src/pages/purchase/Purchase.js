@@ -274,57 +274,71 @@ const Purchase = () => {
     });
   };
 
-  const processPaymentWithWompi = ( customerId) => {
+  const processPaymentWithWompi = ( customerId ) => {
     console.log("Bienvenida processPaymentWithWompi");
   
     return new Promise(async (resolve, reject) => {
+      if (!window.WidgetCheckout) {
+        console.error("Wompi WidgetCheckout no está cargado en la página.");
+        return reject(new Error("Error: Wompi no está disponible."));
+      }
+  
       const transactionReference = `transaction-${Date.now()}`;
   
-      // 1. Inicializar Wompi Checkout
+      console.log("Inicializando el checkout de Wompi...");
+  
+      // 1️⃣ Inicializar Wompi Checkout
       const checkout = new window.WidgetCheckout({
         currency: "COP",
         amountInCents: totalAmount * 100,
         reference: transactionReference,
-        publicKey: publicKey, // Llave pública de Wompi
+        publicKey: publicKey,
       });
   
-      console.log("Bienvenida processPaymentWithWompi 2");
+      console.log("Checkout inicializado. Mostrando modal de pago...");
   
-      // 2. Guardar la transacción en la base de datos antes de que el usuario finalice el pago
-      const initialTransaction = {
-        reference: transactionReference,
-        amount: totalAmount,
-        currency: "COP",
-        status: "CREATED", // Estado inicial antes de la confirmación del pago
-        customerId: customerId,
-        createdAt: new Date(),
-      };
-  
-      try {
-        await createTransactionRecord(initialTransaction);
-        console.log("Transacción guardada en la base de datos.");
-      } catch (error) {
-        console.error("Error al guardar la transacción:", error);
-        return reject(error); // Si falla la creación, rechazamos la promesa
-      }
-  
-      // 3. Abrir el checkout para que el usuario ingrese sus datos y pague
+      // 2️⃣ ABRIR EL MODAL DEL CHECKOUT
       checkout.open(async (result) => {
-        console.log("Resultado del pago:", result);
+        console.log("Resultado del pago recibido:", result);
   
         const transaction = result.transaction;
   
+        if (!transaction) {
+          console.error("No se recibió información de la transacción.");
+          return reject(new Error("No se recibió información de la transacción"));
+        }
+  
+        // 3️⃣ Guardar la transacción en la base de datos justo después de abrir el modal
+        console.log("Guardando transacción en la base de datos...");
+        const initialTransaction = {
+          reference: transactionReference,
+          amount: totalAmount,
+          currency: "COP",
+          status: "CREATED",
+          customerId: customerId,
+          createdAt: new Date(),
+        };
+  
+        try {
+          await createTransactionRecord(initialTransaction);
+          console.log("Transacción guardada en la base de datos.");
+        } catch (error) {
+          console.error("Error al guardar la transacción:", error);
+          return reject(error);
+        }
+  
+        // 4️⃣ Validar y actualizar la transacción según el resultado de Wompi
         if (transaction.status === "APPROVED") {
           console.log("Transacción aprobada en Wompi:", transaction);
-          // 5. Actualizar la transacción con el resultado final
+
+              // 7️⃣ Actualizar la transacción con el resultado final
               await updateTransactionRecord(transactionReference, {
                 status: "APPROVED",
                 wompiTransactionId: transaction.id,
                 updatedAt: new Date(),
               });
   
-              resolve(transaction); // Transacción confirmada
-
+              resolve(transaction);
         } else {
           console.error("Transacción rechazada o fallida:", transaction.status);
           reject(new Error(`Transacción rechazada: ${transaction.status}`));
