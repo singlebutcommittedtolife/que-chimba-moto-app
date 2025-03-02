@@ -51,20 +51,11 @@ router.post('/', async (req, res) => {
 
 // Ruta para crear transacciones
 router.post('/create-transaction', async (req, res) => {
-  const { reference,amount,currency,status, customerId, createdAt} = req.body;
-console.log("req.body", req.body)
-  const transaction = new Transaction({
-    reference,
-    amount,
-    currency,
-    status,
-    customerId,
-    createdAt
-  });
-
   // Endpoint de Wompi
+  console.log("create-transaction ",req.body)
   try {
-    const newTransaction = await transaction.save();
+    const newTransaction = new Transaction (req.body);
+    await newTransaction.save();
     res.status(201).json(newTransaction);
   } catch (error) {
     res.status(400).json({ message: error.message });
