@@ -14,8 +14,9 @@ export const createTransaction = async ( transaction) => {
 };
 
 
-export const updateTransaction = async (transactionReference, updatedTransaction) => {  try {
-    const response = await axios.post(`${API_URL}update-transaction/${transactionReference}`,
+export const updateTransaction = async (transactionReference, updatedTransaction) => { 
+   try {
+    const response = await axios.put(API_URL.concat("update-transaction/").concat(transactionReference),
        updatedTransaction);
 
     return response.data; // Devuelve los datos de la transacción
