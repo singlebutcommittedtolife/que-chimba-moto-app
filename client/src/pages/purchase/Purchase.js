@@ -394,7 +394,7 @@ const Purchase = () => {
       console.log("response ticket  "+ticket)
       // Paso 3: Procesar pago con Wompi
       const transaction = await processPaymentWithWompi(newClient._id,ticket.ticketNumber);
-  
+      console.log("transaction despues "+transaction)
       await sendTransactionEmail(transaction);
   
       // Redireccionar a la página de confirmación
