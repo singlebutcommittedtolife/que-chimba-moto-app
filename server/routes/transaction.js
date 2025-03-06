@@ -66,6 +66,7 @@ router.post('/create-transaction', async (req, res) => {
 router.put("/update-transaction/:reference", async (req, res) => {
   try {
     const { reference } = req.params;
+    console.log("req.body "+req.body)
     const updateData = new Transaction (req.body); // Contiene los nuevos datos de la transacción (estado, wompiTransactionId, etc.)
     console.log("updateData "+updateData)
     // Buscar y actualizar la transacción en la base de datos
