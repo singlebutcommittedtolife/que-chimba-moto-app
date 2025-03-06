@@ -398,7 +398,7 @@ const Purchase = () => {
       await sendTransactionEmail(transaction);
   
       // Redireccionar a la página de confirmación
-      navigate("/confirmation", { state: { totalAmount } });
+      navigate("/confirmation", { state: { transaction } });
     } catch (error) {
       console.error("Error en el proceso de compra:", error.message);
       // Aquí podrías mostrar un mensaje de error al usuario
