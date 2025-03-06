@@ -407,16 +407,21 @@ const Purchase = () => {
 
   const sendTransactionEmail = async (transaction) => {
     console.log("sendEmal")
+
     const emailInfo=({
       to:transaction.customerEmail,
       subject: "Confirmación de pago - Que Chimba Moto 🏍️",
-      text: `Hola ${transaction.customerName}, tu pago ha sido procesado correctamente.`,
+      text: `Hola ${transaction.customerData.fullName}, tu pago ha sido procesado correctamente.`,
       html: `
-      <h1>¡Hola ${transaction.customerName}!</h1>
+      <h1>¡Hola ${transaction.customerData.fullName}!</h1>
       <p>Tu pago ha sido procesado correctamente.</p>
       <p>Detalles de la transacción:</p>
       <ul>
-        <li><strong>Monto:</strong> ${transaction.amount} COP</li>
+        <li><strong>Monto:</strong> 
+        ${(transaction/100).toLocaleString("es-CO", {
+          style: "currency",
+          currency: "COP",
+        })} COP</li>
         <li><strong>Referencia:</strong> ${transaction.reference}</li>
         <li><strong>Estado:</strong> ${transaction.status}</li>
       </ul>
