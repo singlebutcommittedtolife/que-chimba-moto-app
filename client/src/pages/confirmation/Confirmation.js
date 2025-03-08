@@ -3,9 +3,13 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
 
-const Confirmation = ({ transaction }) => {
-  console.log("confirmacion "+transaction)
-  const { reference, amount, createdAt } = transaction || {};
+import { useLocation } from "react-router-dom";
+
+const Confirmation = () => {
+  const location = useLocation();
+  const transaction = location.state?.transaction; // Extrae la transacción
+
+  console.log("confirmacion ", transaction);
 
     return (
         <div>
