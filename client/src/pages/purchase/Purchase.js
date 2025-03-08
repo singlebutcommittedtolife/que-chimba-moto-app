@@ -418,7 +418,7 @@ const Purchase = () => {
       <p>Detalles de la transacción:</p>
       <ul>
         <li><strong>Monto:</strong> 
-        ${(transaction/100).toLocaleString("es-CO", {
+        ${(transaction.amount/100).toLocaleString("es-CO", {
           style: "currency",
           currency: "COP",
         })} COP</li>
