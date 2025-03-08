@@ -417,8 +417,9 @@ const Purchase = () => {
       <p>Tu pago ha sido procesado correctamente.</p>
       <p>Detalles de la transacción:</p>
       <ul>
+        <li><strong>Email:</strong> ${transaction.customerEmail}</li>
         <li><strong>Monto:</strong> 
-        ${(transaction.amount/100).toLocaleString("es-CO", {
+        ${(transaction.amountInCents/100).toLocaleString("es-CO", {
           style: "currency",
           currency: "COP",
         })} COP</li>

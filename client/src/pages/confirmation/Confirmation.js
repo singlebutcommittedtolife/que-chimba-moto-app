@@ -20,11 +20,12 @@ const Confirmation = () => {
                     <p className="text-lg">Gracias por realizar su compra.</p>
                     <p className="text-lg my-4">Detalles de la transacción:</p>
                     <div className="bg-gray-100 rounded-lg shadow-md p-6 inline-block text-left">
-                        <p><strong>Nombre:</strong>${transaction.customerData.fullName}</p>
-                        <p><strong>Email:</strong>${transaction.customerData.fullName}</p>
-                        <p><strong>Número de Referencia:</strong> ${transaction.reference}</p>
+                        <p><strong>Nombre:</strong>{transaction.customerData.fullName}</p>
+                        <p><strong>Email:</strong>{transaction.customerEmail}</p>
+                        <p><strong>Número de Referencia:</strong> {transaction.reference}</p>
+                        <p><strong>Método de pago:</strong> {transaction.paymentMethod.extra.name}</p>
                         <p><strong>Monto Total:</strong> 
-                        ${(transaction/100).toLocaleString("es-CO", {
+                        ${(transaction.amountInCents/100).toLocaleString("es-CO", {
                             style: "currency",
                             currency: "COP",
                           })} </p>
