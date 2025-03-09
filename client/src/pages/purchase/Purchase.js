@@ -44,7 +44,7 @@ const Purchase = () => {
    useEffect(() => {
     console.log("useEffect 1")
     console.log("wompy key "+publicKey);
-
+    console.log("initialQuantity"+initialQuantity)
     const fetchRaffle = async () => {
       try {
         const data = await getActiveRaffle(); // Llama al servicio
@@ -156,6 +156,7 @@ const Purchase = () => {
   
   const generateTicketsForClient = async (clientId) => {
     try {
+      console.log("generateTicketsForClient "+raffleNumber)
       let remainingTickets = raffleNumber;
   
       while (remainingTickets > 0) {
