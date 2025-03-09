@@ -77,6 +77,7 @@ const Purchase = () => {
   const calculateTotal = () => {
 
     const total = selectedRaffles.reduce((sum, raffle) => {
+      console.log(raffle)
       const price = parseFloat(raffle.price['$numberDecimal']); // Convertir `$numberDecimal` a número
       const quantity = raffle.quantity || 0; // Usar 0 como valor predeterminado para quantity
       return sum + (price * quantity);
