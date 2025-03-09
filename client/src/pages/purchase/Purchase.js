@@ -78,15 +78,16 @@ const Purchase = () => {
 
     const total = selectedRaffles.reduce((sum, raffle) => {
       console.log(raffle)
-      console.log("quantity "+raffle.quantity)
-
       const price = parseFloat(raffle.price['$numberDecimal']); // Convertir `$numberDecimal` a número
       const quantity = raffle.quantity || 0; // Usar 0 como valor predeterminado para quantity
       return sum + (price * quantity);
     }, 0);
+    console.log("selectedRaffles[0] "+selectedRaffles[0])
 
     setTotalAmount(total);
     const quantity=selectedRaffles[0]?.quantity || 0;
+    console.log("quantity[0] "+quantity)
+
     setRaffleNumber(quantity); // Usar `setRaffleNumber` para actualizar la variable de estado
 
     console.log('raffleNumer'+raffleNumber)
