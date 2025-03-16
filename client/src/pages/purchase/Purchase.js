@@ -369,10 +369,11 @@ const Purchase = () => {
   
       // Paso 1: Crear cliente
       const newClient = await createNewClient();
-  
+      const raffleId = selectedRaffles[0]?.id; // Tomar la primera rifa seleccionada
+      console.log("📌 Raffle ID seleccionado:", raffleId);
      
       // Paso 2: Generar tickets
-      const ticket=await generateTicketsForClient(newClient._id,"13223");
+      const ticket=await generateTicketsForClient(newClient._id,raffleId);
       console.log("response ticket  "+ticket)
       // Paso 3: Procesar pago con Wompi
       const transaction = await processPaymentWithWompi(newClient._id,ticket.ticketNumber);
