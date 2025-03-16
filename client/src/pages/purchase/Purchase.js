@@ -181,10 +181,13 @@ const Purchase = () => {
       console.log("Ticket creado:", newTicketPurchase);
   
       const assignedNumbers = []; // Guardará los números asignados
-  
+      console.log(` Número de rifa asignado: ${remainingTickets}`);
+
       // 🔄 2️⃣ Generar múltiples números de rifa para este ticket
       while (remainingTickets > 0) {
         try {
+          console.log(` Número de rifa asignado 2: ${remainingTickets}`);
+
           // 3️⃣ Llamar al servicio del backend para asignar un número de rifa aleatorio
           const assignedRaffleNumber = await createRaffleNumber({
             raffleId,
@@ -197,7 +200,7 @@ const Purchase = () => {
           remainingTickets--;
   
         } catch (error) {
-          console.error(" Error al asignar un número de rifa:", error);
+          console.error(" Error al asignar un número de rifa purchase: ", error);
         }
       }
   
