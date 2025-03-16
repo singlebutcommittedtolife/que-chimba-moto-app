@@ -100,7 +100,7 @@ const Purchase = () => {
   const handleQuantityChange = (id, newQuantity) => {
     setSelectedRaffles(prevRaffles =>
       prevRaffles.map(raffle =>
-        raffle.id === id ? { ...raffle, quantity: Math.max(1, newQuantity) } : raffle
+        raffle.id === id ? { ...raffle, quantity: Math.max(2, newQuantity) } : raffle
       )
     );
   };
@@ -569,7 +569,12 @@ const Purchase = () => {
           <div key={raffle.id} className="flex items-center justify-between mb-4">
             <span>{raffle.name}</span>
             <div>
-              <button onClick={() => handleQuantityChange(raffle.id, raffle.quantity - 1)} className="bg-gray-200 px-2 py-1 rounded">-</button>
+            <button 
+                onClick={() => handleQuantityChange(raffle.id, raffle.quantity - 1)} 
+                className={`bg-gray-200 px-2 py-1 rounded ${raffle.quantity === 2 ? "opacity-50 cursor-not-allowed" : ""}`}
+                disabled={raffle.quantity === 2} >
+                -
+              </button>
               <span className="mx-2">{raffle.quantity}</span>
               <button onClick={() => handleQuantityChange(raffle.id, raffle.quantity + 1)} className="bg-gray-200 px-2 py-1 rounded">+</button>
               <button onClick={() => handleRemoveRaffle(raffle.id)} className="ml-4 text-red-500">Eliminar</button>
