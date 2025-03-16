@@ -7,7 +7,7 @@ import { generateTicket } from '../../services/ticketPurchaseService';
 import { getActiveRaffle } from '../../services/raffleService';  
 import { createTransaction } from '../../services/transactionService';  
 import { updateTransaction } from '../../services/transactionService';  
-import {raffleNumberService} from "../../services/raffleNumberService";
+import {createRaffleNumber} from "../../services/raffleNumberService";
 
 
 import { validateTransactionOnServer } from '../../services/transactionService';  
@@ -186,7 +186,7 @@ const Purchase = () => {
       while (remainingTickets > 0) {
         try {
           // 3️⃣ Llamar al servicio del backend para asignar un número de rifa aleatorio
-          const assignedRaffleNumber = await raffleNumberService.createRaffleNumber({
+          const assignedRaffleNumber = await createRaffleNumber({
             raffleId,
             ticketId: newTicketPurchase._id,
             clientId,
