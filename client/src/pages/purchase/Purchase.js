@@ -197,11 +197,12 @@ const Purchase = () => {
   
           console.log(` Número de rifa asignado: ${assignedRaffleNumber.number}`);
           assignedNumbers.push(assignedRaffleNumber);
-          remainingTickets--;
+          
   
         } catch (error) {
           console.error(" Error al asignar un número de rifa purchase: ", error);
         }
+        remainingTickets--;
       }
   
       // 🔥 4️⃣ Retornar el ticket con todos los números asignados
