@@ -3,13 +3,9 @@ import axios from 'axios';
 const API_URL = 'https://que-chimba-moto-app-production.up.railway.app'; // URL base de la API de clientes
 
 // Obetener el listado de raffles
-export const createRaffleNumber = async (raffleId, ticketId, clientId) => {
+export const createRaffleNumber = async (raffleNumber) => {
     try {
-        const response = await axios.post(API_URL.concat("/raffleNumber"), {
-          raffleId,
-          ticketId,
-          clientId
-        });
+        const response = await axios.post(API_URL.concat("/raffleNumber"), raffleNumber);
         return response.data;
       } catch (error) {
         console.error("Error al asignar el número de rifa:", error);

@@ -189,11 +189,13 @@ const Purchase = () => {
           console.log(` Número de rifa asignado 2: ${remainingTickets}`);
 
           // 3️⃣ Llamar al servicio del backend para asignar un número de rifa aleatorio
-          const assignedRaffleNumber = await createRaffleNumber({
+
+          const raffleNumberVal = {
             raffleId,
             ticketId: newTicketPurchase._id,
             clientId,
-          });
+          };
+          const assignedRaffleNumber = await createRaffleNumber(raffleNumberVal);
   
           console.log(` Número de rifa asignado: ${assignedRaffleNumber.number}`);
           assignedNumbers.push(assignedRaffleNumber);
