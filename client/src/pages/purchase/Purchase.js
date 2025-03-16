@@ -73,6 +73,9 @@ const Purchase = () => {
     calculateTotal();
   }, [selectedRaffles]);
 
+  useEffect(() => {
+    console.log("🎯 raffleNumber actualizado:", raffleNumber);
+}, [raffleNumber]);
 
   const calculateTotal = () => {
 
@@ -90,7 +93,7 @@ const Purchase = () => {
 
     setRaffleNumber(quantity); // Usar `setRaffleNumber` para actualizar la variable de estado
 
-    console.log('raffleNumer'+raffleNumber)
+    console.log('raffleNumer calculateTotal '+raffleNumber)
   };
 
   const handleQuantityChange = (id, newQuantity) => {
