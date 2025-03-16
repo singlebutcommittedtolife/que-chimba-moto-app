@@ -8,6 +8,7 @@ const ticketPurchaseRoutes= require('./routes/ticketPurchase');
 const raffleRoutes= require('./routes/raffle');
 const transactionRoutes= require('./routes/transaction');
 const emailRoutes= require('./routes/email');
+const RaffleNumberRoutes = require('./models/RaffleNumber');
 
 // Configurar CORS para permitir que el frontend se comunique con el backend
 app.use(cors());
@@ -32,4 +33,5 @@ app.use(ticketPurchaseRoutes);  // Esta línea monta las rutas de cliente
 app.use(raffleRoutes);  // Esta línea monta las rutas de rifas
 app.use(transactionRoutes);  // Esta línea monta las rutas de rifas
 app.use(emailRoutes);  // Esta línea monta las rutas de rifas
+app.use(RaffleNumberRoutes);  // Esta línea monta las rutas de rifas
 
