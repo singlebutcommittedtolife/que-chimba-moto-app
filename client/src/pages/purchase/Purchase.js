@@ -7,6 +7,7 @@ import { generateTicket } from '../../services/ticketPurchaseService';
 import { getActiveRaffle } from '../../services/raffleService';  
 import { createTransaction } from '../../services/transactionService';  
 import { updateTransaction } from '../../services/transactionService';  
+import {raffleNumberService} from "../services/raffleNumberService";
 
 
 import { validateTransactionOnServer } from '../../services/transactionService';  
@@ -161,31 +162,56 @@ const Purchase = () => {
     }
   };
   
-  const generateTicketsForClient = async (clientId) => {
+  const generateTicketsForClient = async (clientId, raffleId) => {
     try {
-      console.log("generateTicketsForClient "+raffleNumber)
+      console.log("🔹 Generando un ticket para el cliente:", clientId);
+      console.log("🎟️ Cantidad de números de rifa a generar:", raffleNumber);
+  
       let remainingTickets = raffleNumber;
   
+      // 1️⃣ Crear el ticket solo una vez antes del while
+      const ticketPurchaseData = {
+        raffleId,
+        clientId,
+        registryDate: new Date(),
+        registryUser: "chimbaMoto",
+      };
+  
+      const newTicketPurchase = await generateTicket(ticketPurchaseData);
+      console.log("Ticket creado:", newTicketPurchase);
+  
+      const assignedNumbers = []; // Guardará los números asignados
+  
+      // 🔄 2️⃣ Generar múltiples números de rifa para este ticket
       while (remainingTickets > 0) {
-        const ticketPurchaseData = {
-          raffleNumber: "123", // Reemplazar con lógica real si es necesario
-          clientId,
-          registryDate: new Date(),
-          registryUser: "chimbaMoto",
-        };
+        try {
+          // 3️⃣ Llamar al servicio del backend para asignar un número de rifa aleatorio
+          const assignedRaffleNumber = await raffleNumberService.createRaffleNumber({
+            raffleId,
+            ticketId: newTicketPurchase._id,
+            clientId,
+          });
   
-        const newTicketPurchase = await generateTicket(ticketPurchaseData);
-        console.log("Ticket Purchase creado:", newTicketPurchase);
+          console.log(` Número de rifa asignado: ${assignedRaffleNumber.number}`);
+          assignedNumbers.push(assignedRaffleNumber);
+          remainingTickets--;
   
-        remainingTickets--;
-        return newTicketPurchase;
+        } catch (error) {
+          console.error(" Error al asignar un número de rifa:", error);
+        }
       }
-
+  
+      // 🔥 4️⃣ Retornar el ticket con todos los números asignados
+      return { newTicketPurchase, assignedNumbers };
+  
     } catch (error) {
       console.error("Error al generar los tickets:", error);
       throw new Error("Error al generar los tickets");
     }
   };
+
+
+
   const handleWompiPayment = () => {
     const checkout = new window.WidgetCheckout({
         currency: 'COP',
@@ -229,63 +255,6 @@ const Purchase = () => {
 
 
 
-
-  const processPaymentWithWompi2 = async (customerId) => {
-    return new Promise(async (resolve, reject) => {
-      const transactionReference = `transaction-${Date.now()}`;
-  
-      // 1. Inicializar Wompi Checkout
-      const checkout = new window.WidgetCheckout({
-        currency: "COP",
-        amountInCents: totalAmount * 100,
-        reference: transactionReference,
-        clientId:customerId,
-        publicKey: publicKey, // Llave pública de Wompi
-      });
-  
-      console.log("Checkout inicializado, ahora guardando la transacción en la base de datos...");
-  
-      // 2. Guardar la transacción en la base de datos antes de abrir el checkout
-      const initialTransaction = {
-        reference: transactionReference,
-        amount: totalAmount,
-        currency: "COP",
-        status: "CREATED", // Estado inicial antes de finalizar el pago
-        createdAt: new Date(),
-      };
-      console.log("createTransactionRecord",initialTransaction)
-  
-      try {
-        await createTransactionRecord(initialTransaction);
-        console.log("Transacción guardada en la base de datos. Ahora abriendo el checkout...");
-      } catch (error) {
-        return reject(error); // Si falla la creación, rechazamos la promesa
-      }
-  
-      // 3. Ahora sí abrimos el checkout para que el usuario pague
-      checkout.open(async (result) => {
-        console.log("Resultado del pago:", result);
-  
-        if (result.transaction) {
-          const updatedTransaction = {
-            status: result.transaction.status,
-            wompiTransactionId: result.transaction.id,
-            updatedAt: new Date(),
-          };
-  
-          try {
-            // 4. Actualizar la transacción en la base de datos con el estado final
-            await updateTransactionRecord(transactionReference, updatedTransaction);
-            resolve(result.transaction);
-          } catch (error) {
-            reject(error);
-          }
-        } else {
-          reject({ error: "No se recibió información de Wompi", details: result });
-        }
-      });
-    });
-  };
 
   const processPaymentWithWompi = ( clientId,raffleId ) => {
     console.log("Bienvenida processPaymentWithWompi "+clientId);
@@ -397,8 +366,9 @@ const Purchase = () => {
       // Paso 1: Crear cliente
       const newClient = await createNewClient();
   
+     
       // Paso 2: Generar tickets
-      const ticket=await generateTicketsForClient(newClient._id);
+      const ticket=await generateTicketsForClient(newClient._id,"13223");
       console.log("response ticket  "+ticket)
       // Paso 3: Procesar pago con Wompi
       const transaction = await processPaymentWithWompi(newClient._id,ticket.ticketNumber);
