@@ -15,9 +15,9 @@ const RaffleNumber = require("../models/RaffleNumber");
   });
 
   // 🎟️ Asignar un número de rifa a un ticket
-  router.post('/ticket/generate-ticket', async (req, res) => {
+  router.post('/raffleNumber', async (req, res) => {
     try {
-      console.log("generate-ticket")
+      console.log("raffleNumber")
       const { raffleId, ticketId, clientId }= req.body;
 
       let number;
