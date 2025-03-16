@@ -7,7 +7,7 @@ import { generateTicket } from '../../services/ticketPurchaseService';
 import { getActiveRaffle } from '../../services/raffleService';  
 import { createTransaction } from '../../services/transactionService';  
 import { updateTransaction } from '../../services/transactionService';  
-import {raffleNumberService} from "../services/raffleNumberService";
+import {raffleNumberService} from "../../services/raffleNumberService";
 
 
 import { validateTransactionOnServer } from '../../services/transactionService';  
