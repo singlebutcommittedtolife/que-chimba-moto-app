@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 const Confirmation = () => {
   const location = useLocation();
   const transaction = location.state?.transaction; // Extrae la transacción
+  const raffleNumbers = location.state?.assignedNumbers; // Extrae los numeros
 
   console.log("confirmacion ", transaction);
 
@@ -30,6 +31,8 @@ const Confirmation = () => {
                             currency: "COP",
                           })} </p>
                         <p><strong>Fecha: </strong> {transaction.createdAt}</p>
+                        <p><strong>Boletas: </strong> {raffleNumbers.number}</p>
+
                     </div>
                 </section>
             </div>

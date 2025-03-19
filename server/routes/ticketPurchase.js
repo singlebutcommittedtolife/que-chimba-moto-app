@@ -53,22 +53,16 @@ function generarNumeroAleatorio() {
 // Ruta para generar un ticket y guardarlo
 router.post('/ticket/generate-ticket', async (req, res) => {
   try {
-    let raffleNumber;
-    let exists = true;
+    const timestamp = Date.now();
 
-    // Generar un número único
-    while (exists) {
-      raffleNumber = generarNumeroAleatorio();
-      exists = await TicketPurchase.exists({ raffleNumber });
-    }
     console.log("concat s "+req.body.clientId);
-    let ticket="123".concat(raffleNumber);
+    let ticket=timestamp.concat(req.clientId);
     // Crear y guardar la compra de ticket
     const newTicket = new TicketPurchase({
       ticketNumber:ticket,
+      raffleId:req.body.raffleId,
       clientId: req.body.clientId, // Proporcionado en el cuerpo de la solicitud
       purchaseStatus: 'pendiente',
-      raffleNumber:raffleNumber,
       purchaseDate: new Date()
     });
 

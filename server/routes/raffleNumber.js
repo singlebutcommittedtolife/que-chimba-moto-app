@@ -14,6 +14,10 @@ const RaffleNumber = require("../models/RaffleNumber");
     }
   });
 
+  function generarNumeroAleatorio() {
+    return Math.floor(1000 + Math.random() * 9000);
+  }
+
   //  Asignar un número de rifa a un ticket
   router.post('/raffleNumber', async (req, res) => {
     try {
@@ -25,7 +29,7 @@ const RaffleNumber = require("../models/RaffleNumber");
 
       //  1️⃣ Generar un número aleatorio hasta encontrar uno libre
       do {
-        number = Math.floor(Math.random() * 1000) + 1; // ⚠️ Ajusta el 1000 según el rango de tu rifa
+        number = generarNumeroAleatorio(); // ⚠️ Ajusta el 1000 según el rango de tu rifa
         exists = await RaffleNumber.findOne({ number, raffleId });
       } while (exists); // Si el número ya está vendido, genera otro
 

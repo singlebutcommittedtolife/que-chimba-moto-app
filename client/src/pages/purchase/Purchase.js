@@ -199,7 +199,7 @@ const Purchase = () => {
   
           console.log(` Número de rifa asignado: ${assignedRaffleNumber.number}`);
           assignedNumbers.push(assignedRaffleNumber);
-          
+          console.log("assignedNumbers ",assignedNumbers)
   
         } catch (error) {
           console.error(" Error al asignar un número de rifa purchase: ", error);
@@ -375,15 +375,15 @@ const Purchase = () => {
       console.log("📌 Raffle ID seleccionado:", raffleId);
      
       // Paso 2: Generar tickets
-      const ticket=await generateTicketsForClient(newClient._id,raffleId);
-      console.log("response ticket  "+ticket)
+      const { newTicketPurchase, assignedNumbers } =await generateTicketsForClient(newClient._id,raffleId);
+      console.log("response ticket  "+newTicketPurchase)
       // Paso 3: Procesar pago con Wompi
-      const transaction = await processPaymentWithWompi(newClient._id,ticket.ticketNumber);
+      const transaction = await processPaymentWithWompi(newClient._id,newTicketPurchase.ticketNumber);
       console.log("transaction despues "+transaction)
       await sendTransactionEmail(transaction);
   
       // Redireccionar a la página de confirmación
-      navigate("/confirmation", { state: { transaction } });
+      navigate("/confirmation", { state: { transaction,assignedNumbers } });
     } catch (error) {
       console.error("Error en el proceso de compra:", error.message);
       // Aquí podrías mostrar un mensaje de error al usuario
