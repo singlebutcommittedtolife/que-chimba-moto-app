@@ -31,7 +31,10 @@ const Confirmation = () => {
                             currency: "COP",
                           })} </p>
                         <p><strong>Fecha: </strong> {transaction.createdAt}</p>
-                        <p><strong>Boletas: </strong> {raffleNumbers.number}</p>
+                        <p><strong>Boletas:</strong> </p> 
+                        {raffleNumbers.map((raflleNumber) => (
+                          raflleNumber.number
+                        ))}
 
                     </div>
                 </section>
