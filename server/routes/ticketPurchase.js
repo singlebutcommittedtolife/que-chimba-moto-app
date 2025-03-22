@@ -56,7 +56,7 @@ router.post('/ticket/generate-ticket', async (req, res) => {
     const timestamp = Date.now();
 
     console.log("concat s "+req.body.clientId);
-    let ticket=timestamp.concat(req.body.clientId);
+    let ticket = timestamp.toString() + req.body.clientId.toString();
     console.log("ticket ",ticket)
 
     // Crear y guardar la compra de ticket
