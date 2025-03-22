@@ -57,6 +57,8 @@ router.post('/ticket/generate-ticket', async (req, res) => {
 
     console.log("concat s "+req.body.clientId);
     let ticket=timestamp.concat(req.clientId);
+    console.log("ticket ",ticket)
+
     // Crear y guardar la compra de ticket
     const newTicket = new TicketPurchase({
       ticketNumber:ticket,
@@ -65,6 +67,7 @@ router.post('/ticket/generate-ticket', async (req, res) => {
       purchaseStatus: 'pendiente',
       purchaseDate: new Date()
     });
+    console.log("newTicket ",newTicket)
 
     await newTicket.save();
     res.status(201).json(newTicket);
