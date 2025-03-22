@@ -317,7 +317,8 @@ const Purchase = () => {
           console.error("Error al guardar la transacción:", error);
           return reject(error);
         }
-  
+        setLoading(true); // <-- Activa el loading
+
         // 4️⃣ Validar y actualizar la transacción según el resultado de Wompi
         if (transaction.status === "APPROVED") {
           console.log("Transacción aprobada en Wompi:", transaction);
@@ -381,7 +382,6 @@ const Purchase = () => {
       // Paso 3: Procesar pago con Wompi
       const transaction = await processPaymentWithWompi(newClient._id,newTicketPurchase.ticketNumber);
       console.log("transaction despues "+transaction)
-      setLoading(true); // <-- Activa el loading
 
       await sendTransactionEmail(transaction);
   
