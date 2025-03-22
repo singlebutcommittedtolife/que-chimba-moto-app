@@ -7,7 +7,7 @@ const ticketPurchaseSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  raffleNumber: {
+  raffleId: {
     type: String,
     required: true
   },
