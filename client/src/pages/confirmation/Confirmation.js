@@ -47,7 +47,7 @@ const Confirmation = () => {
           </div>
 
           <p className="text-center text-green-700 mt-10 font-medium">
-            ¡Gracias por tu compra y mucha suerte en el sorteo! 🍀
+            ¡Gracias por tu compra!
           </p>
         </section>
       </main>

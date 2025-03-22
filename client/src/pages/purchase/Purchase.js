@@ -381,10 +381,11 @@ const Purchase = () => {
       // Paso 3: Procesar pago con Wompi
       const transaction = await processPaymentWithWompi(newClient._id,newTicketPurchase.ticketNumber);
       console.log("transaction despues "+transaction)
+      setLoading(true); // <-- Activa el loading
+
       await sendTransactionEmail(transaction);
   
       // Redireccionar a la página de confirmación
-          setLoading(true); // <-- Activa el loading
 
       navigate("/confirmation", { state: { transaction,assignedNumbers } });
     } catch (error) {
