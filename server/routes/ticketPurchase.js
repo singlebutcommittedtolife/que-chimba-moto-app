@@ -72,6 +72,7 @@ router.post('/ticket/generate-ticket', async (req, res) => {
     await newTicket.save();
     res.status(201).json(newTicket);
   } catch (error) {
+    console.error("Error al generar el ticket:", error); // <-- Esto
     res.status(500).json({ mensaje: 'Error al generar el ticket', error });
   }
 });
