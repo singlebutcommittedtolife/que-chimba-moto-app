@@ -8,7 +8,6 @@ const Confirmation = () => {
   const transaction = location.state?.transaction;
   const raffleNumbers = location.state?.assignedNumbers;
 
-  console.log("confirmacion ", transaction);
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col justify-between">
