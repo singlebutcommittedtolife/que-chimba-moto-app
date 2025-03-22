@@ -21,7 +21,7 @@ const Purchase = () => {
   
   const initialQuantity = parseInt(queryParams.get('quantity')) || 1;
   const [raffleNumber,setRaffleNumber] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const publicKey = process.env.REACT_APP_WOMPI_API_KEY_PUB;
 
@@ -425,12 +425,11 @@ const Purchase = () => {
     <div>
       <Header />
   
-      {loading ? (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-center px-4">
           <div className="loader mb-4"></div>
           <p className="text-xl font-semibold text-gray-700">Procesando tu compra... por favor espera</p>
         </div>
-      ) : (
+ 
         <>
           <div className="container mx-auto px-4 py-8">
             <h1 className="text-3xl font-bold text-center mb-6">Compra de Tickets</h1>
@@ -452,7 +451,6 @@ const Purchase = () => {
   
           <Footer />
         </>
-      )}
     </div>
   );
   
