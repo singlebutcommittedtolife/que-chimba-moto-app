@@ -8,7 +8,7 @@ require('dotenv').config();
 // Ruta del Webhook
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
 
-  const signature = req.headers['X-Event-Checksum']; // Firma enviada por Wompi
+  const signature = req.headers['x-event-checksum']; // Firma enviada por Wompi
   const secret = process.env.WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
   console.log('🚨 Webhook recibido');
   console.log('📦 Raw body:', req.body.toString('utf8'));
@@ -19,11 +19,13 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   try {
 
     const parsed = JSON.parse(req.body.toString('utf8'));
-    console.log("parsed",parsed);
     const transaction = parsed.data?.transaction;
-    console.log("transaction",transaction)
-    const keyTransaction = transaction.id+transaction.status+transaction.amount_in_cents+parsed.timestamp+secret;
-    const isValid = verifySignature(keyTransaction, signature, secret); // Verificar firma
+    const properties = [
+      transaction.id,  // transaction.id
+      transaction.status,               // transaction.status
+      transaction.amount_in_cents                // transaction.amount_in_cents
+    ];
+    const isValid = generarChecksumWompi(properties, timestamp, secret); // Verificar firma
 
     if (!isValid) {
       console.error('Firma no válida para el webhook');
@@ -60,16 +62,13 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 });
 
 // Función para verificar la firma del webhook
-function verifySignature(rawBody, signature, secret) {
-  console.log("Calculated Signature: ", rawBody);
-  console.log(" Provided Signature:", signature);
-  console.log('verifySignature')
-  const hmac = crypto.createHmac('sha256', secret);
-  hmac.update(rawBody);
-  const calculatedSignature = hmac.digest('hex');
-  console.log("Calculated Signature: ", calculatedSignature);
-
-  return calculatedSignature === signature;
+function generarChecksumWompi(dataValues, timestamp, secret) {
+  console.log("dataValues",dataValues);
+  console.log("timestamp",timestamp);
+  const cadena = dataValues.join('') + timestamp + secret;
+  console.log("cadena",cadena);
+  const hash = crypto.createHash('sha256').update(cadena).digest('hex').toUpperCase();
+  return hash;
 }
 
 module.exports = router;
