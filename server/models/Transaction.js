@@ -32,7 +32,7 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     enum: ['CREATED','UPDATED', 'APPROVED', 'DECLINED', 'VOIDED','ERROR','PENDING'],
     required: true,
-    default: 'creada'
+    default: 'CREATED'
   },
   wompiTransactionId: {
     type: String,
