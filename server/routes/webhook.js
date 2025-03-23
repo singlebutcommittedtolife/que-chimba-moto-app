@@ -41,8 +41,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
       // Actualizar la base de datos con la transacción
       const updatedTransaction = await Transaction.findOneAndUpdate(
-        { wompiTransactionId: transaction.id }, // Buscar por referencia de Wompi
-        { status: transaction.status }, // Actualizar el estado del pago
+        { wompiTransactionId: transactionBD.id }, // Buscar por referencia de Wompi
+        { status: transactionBD.status }, // Actualizar el estado del pago
         { new: true }
       );
 

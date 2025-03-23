@@ -219,8 +219,7 @@ const Purchase = () => {
   const processPaymentWithWompi = ( clientId,ticketId ) => {
     setLoading(false);
 
-    console.log("Bienvenida processPaymentWithWompi "+clientId);
-    console.log("Bienvenida processPaymentWithWompi  ticketId "+ticketId);
+    console.log("Bienvenida processPaymentWithWompi "+ticketId);
 
     return new Promise(async (resolve, reject) => {
       if (!window.WidgetCheckout) {
@@ -232,7 +231,7 @@ const Purchase = () => {
   
       console.log("Inicializando el checkout de Wompi...");
   
-      // 1️⃣ Inicializar Wompi Checkout
+      // 1️ Inicializar Wompi Checkout
       const checkout = new window.WidgetCheckout({
         currency: "COP",
         amountInCents: totalAmount * 100,
@@ -242,61 +241,41 @@ const Purchase = () => {
   
       console.log("Checkout inicializado. Mostrando modal de pago...");
   
-      // 2️⃣ ABRIR EL MODAL DEL CHECKOUT
-      checkout.open(async (result) => {
-        console.log("Resultado del pago recibido:", result);
-  
+      // 2️ ABRIR EL MODAL DEL CHECKOUT
+      checkout.open(async (result) => {  
         const transaction = result.transaction;
   
         if (!transaction) {
-          console.error("No se recibió información de la transacción.");
           return reject(new Error("No se recibió información de la transacción"));
         }
-  
-        // 3️⃣ Guardar la transacción en la base de datos justo después de abrir el modal
-        console.log("Guardando transacción en la base de datos...");
-        const initialTransaction = {
-          reference: transactionReference,
-          amount: totalAmount* 100,
-          currency: "COP",
-          status: "CREATED",
-          clientId: clientId,
-          ticketId:ticketId,
-          createdAt: new Date(),
-        };
-        console.log("initialTransaction..",initialTransaction);
 
-        try {
-          await createTransactionRecord(initialTransaction);
-          console.log("Transacción guardada en la base de datos.");
-        } catch (error) {
-          console.error("Error al guardar la transacción:", error);
-          return reject(error);
-        }
-        setLoading(true); // <-- Activa el loading
 
-        // 4️⃣ Validar y actualizar la transacción según el resultado de Wompi
         if (transaction.status === "APPROVED") {
-          console.log("Transacción aprobada en Wompi:", transaction);
-
-              // 7️⃣ Actualizar la transacción con el resultado final
-              await updateTransactionRecord(transactionReference, {
-                status: "UPDATED",
-                wompiTransactionId: transaction.id,
-                updatedAt: new Date(),
-              });
-
-              resolve(transaction);
-        } else {
-          console.error("Transacción rechazada o fallida:", transaction.status);
-          reject(new Error(`Transacción rechazada: ${transaction.status}`));
+          const approvedTransaction = {
+            reference: transactionReference,
+            amount: totalAmount * 100,
+            currency: "COP",
+            status: "APPROVED",
+            clientId,
+            ticketId,
+            wompiTransactionId: transaction.id,
+            createdAt: new Date(),
+            fromFrontend: true,
+          };
+        try {
+        // 3️ Guardar la transacción en la base de datos
+          await createTransactionRecord(approvedTransaction);
+          resolve(transaction);
+        } catch (error) {
+          reject(error);
         }
-      });
+
+      } else {
+        reject(new Error(`Transacción rechazada: ${transaction.status}`));
+      }
     });
-  };
-  
-  
-  
+  });
+};
   
   const createTransactionRecord = async (transaction) => {
     try {
@@ -307,18 +286,6 @@ const Purchase = () => {
       throw new Error("Error al registrar la transacción");
     }
   };
-
-
-  const updateTransactionRecord = async (transactionReference, updateData) => {
-    try {
-      await updateTransaction(transactionReference,updateData);
-      console.log("Transacción actualizada:", transactionReference);
-    } catch (error) {
-      console.error("Error al actualizar la transacción:", error);
-      throw new Error("Error al actualizar la transacción");
-    }
-  };
-
   
 
   const handleSubmit = async (e) => {
