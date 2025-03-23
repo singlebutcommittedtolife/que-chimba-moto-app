@@ -9,11 +9,11 @@ const transactionSchema = new mongoose.Schema({
   },
   clientId: {
     type: String,
-    required: true
+    required: false
   },
   ticketId: {
     type: String,
-    required: true
+    required: false
   },
   amount: {
     type: mongoose.Schema.Types.Decimal128,
