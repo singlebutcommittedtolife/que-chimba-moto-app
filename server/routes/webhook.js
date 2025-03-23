@@ -11,6 +11,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   const signature = req.headers['x-wompi-signature']; // Firma enviada por Wompi
   const secret = process.env.WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
   console.log('🚨 Webhook recibido');
+  console.log('📦 Raw body:', req.body.toString('utf8'));
+  console.log('📫 Signature recibida:', signature);
   console.log('Headers:', req.headers);
 
   console.log('secret ', secret)
@@ -25,8 +27,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       return res.status(401).json({ error: 'Firma no válida' });
     }
 
-    const event = JSON.parse(body).event; // Extraer el evento del payload
-    const transactionData = JSON.parse(body).data;
+    const event = JSON.parse(rawBody).event; // Extraer el evento del payload
+    const transactionData = JSON.parse(rawBody).data;
 
     if (event === 'transaction.updated') {
       const transaction = transactionData.transaction;
@@ -56,6 +58,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
 // Función para verificar la firma del webhook
 function verifySignature(rawBody, signature, secret) {
+  console.log("🧮 Calculated Signature:", rawBody);
+  console.log("📬 Provided Signature:", signature);
   console.log('verifySignature')
   const hmac = crypto.createHmac('sha256', secret);
   hmac.update(rawBody);
