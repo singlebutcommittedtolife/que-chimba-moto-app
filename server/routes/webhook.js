@@ -80,7 +80,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 function generarChecksumWompi(dataValues, timestamp, secret) {
   const cadena = dataValues.join('') + timestamp + secret;
   console.log('🔐 Cadena para firmar:', cadena);
-  const hash = crypto.createHash('sha256').update(cadena).digest('hex').toUpperCase();
+  const hash = crypto.createHash('sha256').update(cadena).digest('hex');
   return hash;
 }
 
