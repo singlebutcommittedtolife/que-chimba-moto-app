@@ -74,7 +74,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
             subject: "Confirmación de pago - Que Chimba Moto 🏍️",
             text: `Hola, tu pago ha sido procesado correctamente.`,
             html: `
-            <h1>¡Hola ${transaction.customerData.fullName}!</h1>
+            <h1>¡Hola, tu pago ha sido procesado correctamente.!</h1>
       
             <strong><p>Detalles de la transacción en Que Chimba de Moto:</p></strong>
             <ul>
