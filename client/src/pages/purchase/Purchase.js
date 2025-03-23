@@ -336,7 +336,7 @@ const Purchase = () => {
       const transaction = await processPaymentWithWompi(newClient.user.id,newTicketPurchase.ticketId);
       console.log("transaction despues "+transaction)
 
-      await sendTransactionEmail(transaction,assignedNumbers);
+      //await sendTransactionEmail(transaction,assignedNumbers);
   
       // Redireccionar a la página de confirmación
 

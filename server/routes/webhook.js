@@ -67,6 +67,35 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       } else {
         console.log(' Transacción actualizada desde webhook');
       }
+      if (tx.status === 'APPROVED') {
+        try {
+          const emailInfo=({
+            to:transaction.customerEmail,
+            subject: "Confirmación de pago - Que Chimba Moto 🏍️",
+            text: `Hola, tu pago ha sido procesado correctamente.`,
+            html: `
+            <h1>¡Hola ${transaction.customerData.fullName}!</h1>
+      
+            <strong><p>Detalles de la transacción en Que Chimba de Moto:</p></strong>
+            <ul>
+              <li><strong>📧 Email:</strong> ${transaction.customerEmail}</li>
+              <li><strong>🧾 Nº de Referencia:</strong> ${transaction?.reference}</li>
+              <li><strong>💳 Método de pago:</strong> ${transaction?.paymentMethod?.extra?.name}</li>
+              <li><strong>💰 Monto Total:</strong> ${(transaction.amountInCents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })} COP</li>
+              <li><strong>🕒 Fecha:</strong> ${new Date(transaction.createdAt).toLocaleString("es-CO")}</li>
+            </ul>
+            <p>Gracias por tu compra en <strong>Que Chimba de Moto</strong> 🏍️</p>
+          `,
+          });
+
+
+          await sendTransactionEmail(emailInfo);
+          console.log('Correo de confirmación enviado con éxito');
+        } catch (emailError) {
+          console.error('Error al enviar el correo de confirmación:', emailError);
+        }
+      }
+      
     }
 
     res.sendStatus(200);
