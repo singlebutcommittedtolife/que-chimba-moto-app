@@ -8,6 +8,7 @@ import { getActiveRaffle } from '../../services/raffleService';
 import { createTransaction } from '../../services/transactionService';  
 import { updateTransaction } from '../../services/transactionService';  
 import {createRaffleNumber} from "../../services/raffleNumberService";
+import sha256 from 'crypto-js/sha256';
 
 
 import { sendMail } from '../../services/emailService';  
@@ -218,7 +219,8 @@ const Purchase = () => {
 
   const processPaymentWithWompi = (clientId, ticketId) => {
     setLoading(true);
-  
+    const integrityKey = process.env.REACT_APP_WOMPI_INTEGRITY_KEY;
+
     return new Promise(async (resolve, reject) => {
       if (!window.WidgetCheckout) {
         console.error("Wompi WidgetCheckout no está cargado en la página.");
@@ -247,13 +249,16 @@ const Purchase = () => {
         console.error(" Error al crear la transacción inicial:", error);
         return reject(error);
       }
-  
+      const integritySignature = sha256(
+        `${amountInCents}${initialTransaction.currency}${transactionReference}${integrityKey}`
+      ).toString();
       // 2️ Inicializar Wompi Checkout
       const checkout = new window.WidgetCheckout({
         currency: "COP",
         amountInCents: amountInCents,
         reference: transactionReference,
         publicKey: publicKey,
+        integrity: integritySignature,
       });
   
       console.log(" Checkout inicializado. Mostrando modal de pago...");
