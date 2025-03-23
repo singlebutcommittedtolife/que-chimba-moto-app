@@ -8,7 +8,7 @@ require('dotenv').config();
 // Ruta del Webhook
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
 
-  const signature = req.headers['X-Event-Checksum']; // Firma enviada por Wompi
+  const signature = req.headers['x-event-checksum']; // Firma enviada por Wompi
   const secret = process.env.WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
   console.log('🚨 Webhook recibido');
   console.log('📦 Raw body:', req.body.toString('utf8'));
