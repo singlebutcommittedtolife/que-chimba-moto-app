@@ -17,8 +17,11 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
   console.log('secret ', secret)
   try {
-    const parsed = req.body;
+
+    const parsed = JSON.parse(req.body.toString('utf8'));
+    console.log("parsed",parsed);
     const transaction = parsed.data?.transaction;
+    console.log("transaction",transaction)
     const keyTransaction = transaction.id+transaction.status+transaction.amount_in_cents+parsed.timestamp+secret;
     const isValid = verifySignature(keyTransaction, signature, secret); // Verificar firma
 
