@@ -156,7 +156,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   console.log('🚨 Webhook recibido');
   console.log('Headers:', req.headers);
   console.log('Raw body:', req.body.toString());
-  console.log('secret ', secret)
+  console.log('secret 123 ', secret)
   try {
     const body = req.body; // Payload enviado por Wompi
     const isValid = verifySignature(body, signature, secret); // Verificar firma
