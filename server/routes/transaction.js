@@ -161,7 +161,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
     if (!isValid) {
       console.error('Firma no válida para el webhook');
-      return res.status(401).send('Firma no válida');
+      return res.status(401).json({ error: 'Firma no válida' });
     }
 
     const event = JSON.parse(body).event; // Extraer el evento del payload
@@ -180,7 +180,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
       if (!updatedTransaction) {
         console.warn('No se encontró una transacción con esta referencia');
-        return res.status(404).send('Transacción no encontrada');
+        return res.status(404).json({ error: 'Transacción no encontrada' });
       }
 
       console.log('Transacción actualizada en la base de datos:', updatedTransaction);
@@ -189,7 +189,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
     res.sendStatus(200); // Respuesta OK para Wompi
   } catch (error) {
     console.error('Error procesando el webhook:', error);
-    res.status(500).send('Error interno del servidor');
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
