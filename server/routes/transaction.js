@@ -28,16 +28,16 @@ router.get('/:id', async (req, res) => {
 
 // Crear una nueva transacción
 router.post('/', async (req, res) => {
-  const { clientId, raffleId, ticketId, amount, datePurchase, paymentMethod, statusPayment, wompiReference } = req.body;
+  const { clientId, ticketId,reference, amount, datePurchase, paymentMethod, statusPayment, wompiTransactionId } = req.body;
   const transaction = new Transaction({
+    reference,
     clientId,
-    raffleId,
     ticketId,
     amount,
     datePurchase,
     paymentMethod,
     statusPayment,
-    wompiReference
+    wompiTransactionId
   });
 
   try {
@@ -150,7 +150,6 @@ const getAcceptanceToken = async () => {
 
 // Ruta del Webhook
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  console.log("varibale ",process.env);
 
   const signature = req.headers['x-wompi-signature']; // Firma enviada por Wompi
   const secret = process.env.WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
@@ -176,8 +175,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
       // Actualizar la base de datos con la transacción
       const updatedTransaction = await Transaction.findOneAndUpdate(
-        { wompiReference: transaction.id }, // Buscar por referencia de Wompi
-        { statusPayment: transaction.status }, // Actualizar el estado del pago
+        { wompiTransactionId: transaction.id }, // Buscar por referencia de Wompi
+        { status: transaction.status }, // Actualizar el estado del pago
         { new: true }
       );
 

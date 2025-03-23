@@ -2,17 +2,17 @@
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
+  reference: {
+    type: String,
+    unique: true,
+    required: true
+  },
   clientId: {
     type: String,
     required: true
   },
-  raffleId: {
+  ticketId: {
     type: String,
-    required: true
-  },
-  reference: {
-    type: String,
-    unique: true,
     required: true
   },
   amount: {
@@ -30,7 +30,7 @@ const transactionSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['creada', 'completado', 'fallido', 'reembolsado'],
+    enum: ['CREATED','UPDATED', 'APPROVED', 'DECLINED', 'VOIDED','ERROR','PENDING'],
     required: true,
     default: 'creada'
   },

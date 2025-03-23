@@ -10,7 +10,6 @@ import { updateTransaction } from '../../services/transactionService';
 import {createRaffleNumber} from "../../services/raffleNumberService";
 
 
-import { validateTransactionOnServer } from '../../services/transactionService';  
 import { sendMail } from '../../services/emailService';  
 
 
@@ -192,7 +191,7 @@ const Purchase = () => {
 
           const raffleNumberVal = {
             raffleId,
-            ticketId: newTicketPurchase._id,
+            ticketId: newTicketPurchase.ticketId,
             clientId,
           };
           const assignedRaffleNumber = await createRaffleNumber(raffleNumberVal);
@@ -218,56 +217,12 @@ const Purchase = () => {
   };
 
 
-
-  const handleWompiPayment = () => {
-    const checkout = new window.WidgetCheckout({
-        currency: 'COP',
-        amountInCents: 5000 * 100, // Monto de prueba
-        reference: `transaction-${Date.now()}`, // Referencia única
-        publicKey:publicKey// Llave pública de Sandbox
-    });
-
-    // Abrir el widget para obtener el token de la tarjeta
-    checkout.open(async (result) => {
-      const transaction = result.transaction;
-      console.log("transaction "+transaction)
-      
-      if (transaction.status === 'APPROVED') {
-        console.log('Token generado:', transaction.payment_method);
-
-        try {
-          // Llamar al servicio para crear la transacción
-          const data = await createTransaction({
-            totalAmount: totalAmount, // Monto total en COP
-            customerEmail: 'cliente@ejemplo.com', // Reemplaza con el correo del usuario
-            paymentToken: transaction.payment_method.token, // Token generado por el widget
-          });
-
-          if (data.error) {
-            alert('Error al procesar el pago en el servidor: ' + data.message);
-          } else {
-            alert('Pago aprobado en el servidor: ' + data.data.id);
-          }
-        } catch (error) {
-          console.error('Error al enviar la transacción al servidor:', error);
-          alert('Error en la comunicación con el servidor.');
-        }
-      } else {
-        alert('Transacción rechazada: ' + transaction.status);
-      }
-
-      setLoading(false);
-    });
-};
-
-
-
-
-  const processPaymentWithWompi = ( clientId,raffleId ) => {
+  const processPaymentWithWompi = ( clientId,ticketId ) => {
     setLoading(false);
 
     console.log("Bienvenida processPaymentWithWompi "+clientId);
-  
+    console.log("Bienvenida processPaymentWithWompi  ticketId "+ticketId);
+
     return new Promise(async (resolve, reject) => {
       if (!window.WidgetCheckout) {
         console.error("Wompi WidgetCheckout no está cargado en la página.");
@@ -282,7 +237,7 @@ const Purchase = () => {
       const checkout = new window.WidgetCheckout({
         currency: "COP",
         amountInCents: totalAmount * 100,
-        reference: transactionReference,
+        reference: transactionReference,//transactionId
         publicKey: publicKey,
       });
   
@@ -305,9 +260,9 @@ const Purchase = () => {
           reference: transactionReference,
           amount: totalAmount* 100,
           currency: "COP",
-          status: "creada",
+          status: "CREATED",
           clientId: clientId,
-          raffleId:raffleId,
+          ticketId:ticketId,
           createdAt: new Date(),
         };
         console.log("initialTransaction..",initialTransaction);
@@ -327,7 +282,7 @@ const Purchase = () => {
 
               // 7️⃣ Actualizar la transacción con el resultado final
               await updateTransactionRecord(transactionReference, {
-                status: "completado",
+                status: "UPDATED",
                 wompiTransactionId: transaction.id,
                 updatedAt: new Date(),
               });
@@ -384,7 +339,7 @@ const Purchase = () => {
       const { newTicketPurchase, assignedNumbers } =await generateTicketsForClient(newClient._id,raffleId);
       console.log("response ticket  "+newTicketPurchase)
       // Paso 3: Procesar pago con Wompi
-      const transaction = await processPaymentWithWompi(newClient._id,newTicketPurchase.ticketNumber);
+      const transaction = await processPaymentWithWompi(newClient._id,newTicketPurchase.ticketId);
       console.log("transaction despues "+transaction)
 
       await sendTransactionEmail(transaction,assignedNumbers);

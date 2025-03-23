@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const ticketPurchaseSchema = new mongoose.Schema({
-  ticketNumber: {
+  ticketId: {
     type: String,
     required: true,
     unique: true
