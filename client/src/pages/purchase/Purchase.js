@@ -252,6 +252,9 @@ const Purchase = () => {
       const integritySignature = sha256(
         `${amountInCents}${initialTransaction.currency}${transactionReference}${integrityKey}`
       ).toString();
+      console.log("integrityKey",integrityKey)
+
+      console.log("integritySignature",integritySignature)
       // 2️ Inicializar Wompi Checkout
       const checkout = new window.WidgetCheckout({
         currency: "COP",
