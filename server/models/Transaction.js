@@ -42,6 +42,18 @@ const transactionSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
+  createdFromWebhook:{
+    type: Boolean,
+    required: false,
+  },
+  updatedFromFrontend:{
+    type: Boolean,
+    required: false,
+  },
+  createdFromFrontend:{
+    type: Boolean,
+    required: false,
+  }
 }, {
   timestamps: true
 });

@@ -5,68 +5,81 @@ const Transaction = require('../models/Transaction');
 require('dotenv').config();
 
 
-// Ruta del Webhook
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const signature = req.headers['x-event-checksum'];
+  const secret = process.env.WOMPI_PRIVATE_EVENT_KEY;
 
-  const signature = req.headers['x-event-checksum']; // Firma enviada por Wompi
-  const secret = process.env.WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
-  console.log('🚨 Webhook recibido');
-  console.log('📦 Raw body:', req.body.toString('utf8'));
-  console.log('📫 Signature recibida:', signature);
-  console.log('Headers:', req.headers);
+  console.log(' Webhook recibido');
+  console.log(' Signature:', signature);
+  console.log(' Raw body:', req.body.toString('utf8'));
 
-  console.log('secret ', secret)
   try {
-
     const parsed = JSON.parse(req.body.toString('utf8'));
     const transaction = parsed.data?.transaction;
-    const properties = [
-      transaction.id,  // transaction.id
-      transaction.status,               // transaction.status
-      transaction.amount_in_cents                // transaction.amount_in_cents
-    ];
-    const isValid = generarChecksumWompi(properties, parsed.timestamp, secret); // Verificar firma
+    const properties = parsed.signature?.properties || [];
+    const timestamp = parsed.timestamp;
 
-    if (!isValid) {
-      console.error('Firma no válida para el webhook');
+    //  Construir string para firma basada en propiedades
+    const dataValues = properties.map((prop) => {
+      const keys = prop.split('.');
+      return keys.reduce((acc, key) => acc?.[key], parsed.data);
+    });
+
+    const localChecksum = generarChecksumWompi(dataValues, timestamp, secret);
+
+    console.log(' Checksum local:', localChecksum);
+    console.log(' Checksum recibido:', signature);
+
+    if (localChecksum !== signature) {
+      console.error(' Firma no válida');
       return res.status(401).json({ error: 'Firma no válida' });
     }
 
-    const event = parsed.event; // Extraer el evento del payload
-    const transactionData = parsed.data;
+    if (parsed.event === 'transaction.updated') {
+      const tx = transaction;
+      console.log(' Transacción del evento:', tx);
 
-    if (event === 'transaction.updated') {
-      const transactionBD = transactionData.transaction;
-      console.log('Transacción actualizada:', transactionBD);
-
-      // Actualizar la base de datos con la transacción
       const updatedTransaction = await Transaction.findOneAndUpdate(
-        { wompiTransactionId: transactionBD.id }, // Buscar por referencia de Wompi
-        { status: transactionBD.status }, // Actualizar el estado del pago
+        { reference: tx.reference }, // Buscar por `reference` generado en frontend
+        {
+          $set: {
+            status: tx.status,
+            wompiTransactionId: tx.id,
+            updatedAt: new Date(),
+            updatedFromWebhook: true,
+          },
+        },
         { new: true }
       );
 
       if (!updatedTransaction) {
-        console.warn('No se encontró una transacción con esta referencia');
-       // return res.status(404).json({ error: 'Transacción no encontrada' });
+        // No existe, creamos nueva transacción
+        console.warn(' Transacción no encontrada, creando nueva...');
+        await Transaction.create({
+          reference: tx.reference,
+          wompiTransactionId: tx.id,
+          amount: tx.amount_in_cents,
+          currency: tx.currency,
+          status: tx.status,
+          createdAt: new Date(tx.created_at),
+          createdFromWebhook: true,
+        });
+      } else {
+        console.log(' Transacción actualizada desde webhook');
       }
-
-      console.log('Transacción actualizada en la base de datos:', updatedTransaction);
     }
 
-    res.sendStatus(200); // Respuesta OK para Wompi
+    res.sendStatus(200);
   } catch (error) {
-    console.error('Error procesando el webhook:', error);
+    console.error(' Error procesando webhook:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
-// Función para verificar la firma del webhook
+//  Función para generar el checksum de Wompi
 function generarChecksumWompi(dataValues, timestamp, secret) {
-  console.log("dataValues",dataValues);
-  console.log("timestamp",timestamp);
   const cadena = dataValues.join('') + timestamp + secret;
-  console.log("cadena",cadena);
+  console.log('🔐 Cadena para firmar:', cadena);
   const hash = crypto.createHash('sha256').update(cadena).digest('hex').toUpperCase();
   return hash;
 }
