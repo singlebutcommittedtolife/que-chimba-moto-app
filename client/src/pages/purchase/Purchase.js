@@ -264,6 +264,8 @@ const Purchase = () => {
 
 
   const processPaymentWithWompi = ( clientId,raffleId ) => {
+    setLoading(false);
+
     console.log("Bienvenida processPaymentWithWompi "+clientId);
   
     return new Promise(async (resolve, reject) => {
@@ -366,6 +368,8 @@ const Purchase = () => {
   
 
   const handleSubmit = async (e) => {
+    setLoading(true);
+
     e.preventDefault();
   
     try {
