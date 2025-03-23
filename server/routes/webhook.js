@@ -5,68 +5,69 @@ const Transaction = require('../models/Transaction');
 require('dotenv').config();
 
 
-// Ruta del Webhook
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+// Webhook Wompi
+router.post('/webhook', express.json(), async (req, res) => {
+  const secret = process.env.WOMPI_PRIVATE_EVENT_KEY;
+  const wompiChecksum = req.headers['x-event-checksum'];
 
-  const signature = req.headers['x-event-checksum']; // Firma enviada por Wompi
-  const secret = process.env.WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
   console.log('🚨 Webhook recibido');
-  console.log('📦 Raw body:', req.body.toString('utf8'));
-  console.log('📫 Signature recibida:', signature);
-  console.log('Headers:', req.headers);
+  console.log('🔑 Secreto:', secret);
+  console.log('📬 Firma enviada por Wompi (x-event-checksum):', wompiChecksum);
 
-  console.log('secret ', secret)
   try {
-    const rawBody = req.body; // Esto es un Buffer gracias a express.raw
-    console.log('🧪 Tipo de rawBody:', typeof rawBody); // Debería ser 'object' (Buffer)
-    console.log('🧪 Es buffer?', Buffer.isBuffer(rawBody)); // Debería ser true
-    const isValid = verifySignature(rawBody, signature, secret); // Verificar firma
+    const parsed = req.body;
+    const transaction = parsed.data?.transaction;
+    const properties = parsed.signature?.properties;
 
-    if (!isValid) {
-      console.error('Firma no válida para el webhook');
+    // Validación de firma basada en las propiedades específicas
+    const dataToSign = properties
+      .map((prop) => {
+        const path = prop.split('.');
+        return path.reduce((obj, key) => obj?.[key], parsed.data);
+      })
+      .join('');
+
+    const hmac = crypto.createHmac('sha256', secret);
+    hmac.update(dataToSign);
+    const localChecksum = hmac.digest('hex');
+
+    console.log('🧮 Data firmada:', dataToSign);
+    console.log('✅ Checksum local:', localChecksum);
+
+    if (wompiChecksum !== localChecksum) {
+      console.error('❌ Firma inválida: no coincide el checksum');
       return res.status(401).json({ error: 'Firma no válida' });
     }
 
-    const event = JSON.parse(rawBody).event; // Extraer el evento del payload
-    const transactionData = JSON.parse(rawBody).data;
+    if (parsed.event === 'transaction.updated') {
+      console.log('✅ Evento: transaction.updated');
+      console.log('📦 Transacción:', transaction);
 
-    if (event === 'transaction.updated') {
-      const transaction = transactionData.transaction;
-      console.log('Transacción actualizada:', transaction);
-
-      // Actualizar la base de datos con la transacción
       const updatedTransaction = await Transaction.findOneAndUpdate(
-        { wompiTransactionId: transaction.id }, // Buscar por referencia de Wompi
-        { status: transaction.status }, // Actualizar el estado del pago
+        { wompiTransactionId: transaction.id },
+        { status: transaction.status },
         { new: true }
       );
 
       if (!updatedTransaction) {
-        console.warn('No se encontró una transacción con esta referencia');
+        console.warn('⚠️ No se encontró la transacción');
         return res.status(404).json({ error: 'Transacción no encontrada' });
       }
 
-      console.log('Transacción actualizada en la base de datos:', updatedTransaction);
+      console.log('✅ Transacción actualizada en DB:', updatedTransaction);
+
+      // Aquí puedes enviar el correo si el status es "APPROVED"
+      if (transaction.status === 'APPROVED') {
+        // await enviarCorreo(transaction.customer_email, ...);
+        console.log('📧 Correo de confirmación enviado');
+      }
     }
 
-    res.sendStatus(200); // Respuesta OK para Wompi
+    res.sendStatus(200);
   } catch (error) {
-    console.error('Error procesando el webhook:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error('💥 Error procesando el webhook:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
   }
 });
-
-// Función para verificar la firma del webhook
-function verifySignature(rawBody, signature, secret) {
-  console.log("Calculated Signature: ", rawBody);
-  console.log(" Provided Signature:", signature);
-  console.log('verifySignature')
-  const hmac = crypto.createHmac('sha256', secret);
-  hmac.update(rawBody);
-  const calculatedSignature = hmac.digest('hex');
-  console.log("Calculated Signature: ", calculatedSignature);
-
-  return calculatedSignature === signature;
-}
 
 module.exports = router;
