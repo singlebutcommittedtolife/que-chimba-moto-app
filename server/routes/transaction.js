@@ -158,8 +158,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   console.log('Raw body:', req.body.toString());
   console.log('secret 123 ', secret)
   try {
-    const body = req.body; // Payload enviado por Wompi
-    const isValid = verifySignature(body, signature, secret); // Verificar firma
+    const rawBody = req.body; // Esto es un Buffer gracias a express.raw
+    const isValid = verifySignature(rawBody, signature, secret); // Verificar firma
 
     if (!isValid) {
       console.error('Firma no válida para el webhook');
@@ -196,9 +196,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 });
 
 // Función para verificar la firma del webhook
-function verifySignature(body, signature, secret) {
+function verifySignature(rawBody, signature, secret) {
   const hmac = crypto.createHmac('sha256', secret);
-  hmac.update(body, 'utf8');
+  hmac.update(rawBody);
   const calculatedSignature = hmac.digest('hex');
   return calculatedSignature === signature;
 }
