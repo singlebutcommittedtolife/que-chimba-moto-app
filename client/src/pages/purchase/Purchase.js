@@ -406,12 +406,11 @@ const Purchase = () => {
       text: `Hola ${transaction.customerData.fullName}, tu pago ha sido procesado correctamente.`,
       html: `
       <h1>¡Hola ${transaction.customerData.fullName}!</h1>
-      <p>Tu pago ha sido procesado correctamente.</p>
 
-      <strong><p>Detalles de la transacción:</p></strong>
+      <strong><p>Detalles de la transacción en Que Chimba de Moto:</p></strong>
       <ul>
         <li><strong>👤 Nombre:</strong> ${transaction?.customerData?.fullName}</li>
-        <li><strong>📧 Email:</strong>${transaction.customerEmail}</li>
+        <li><strong>📧 Email:</strong> ${transaction.customerEmail}</li>
         <li><strong>🧾 Nº de Referencia:</strong> ${transaction?.reference}</li>
         <li><strong>💳 Método de pago:</strong> ${transaction?.paymentMethod?.extra?.name}</li>
         <li><strong>💰 Monto Total:</strong> ${(transaction.amountInCents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })} COP</li>

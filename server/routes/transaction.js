@@ -152,7 +152,9 @@ const getAcceptanceToken = async () => {
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const signature = req.headers['x-wompi-signature']; // Firma enviada por Wompi
   const secret = process.env.REACT_APP_WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
-
+  console.log('🚨 Webhook recibido');
+  console.log('Headers:', req.headers);
+  console.log('Raw body:', req.body.toString());
   try {
     const body = req.body; // Payload enviado por Wompi
     const isValid = verifySignature(body, signature, secret); // Verificar firma
