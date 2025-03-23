@@ -457,7 +457,7 @@ const Purchase = () => {
             type="text"
             name="nombre"
             pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" 
-            maxLength={50}
+            maxLength={40}
             value={formData.nombre}
             onChange={handleChange}
             required
@@ -471,7 +471,7 @@ const Purchase = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="apellidos"
             type="text"
-            maxLength={50}
+            maxLength={40}
             name="apellidos"
             value={formData.apellidos}
             onChange={handleChange}
@@ -566,7 +566,7 @@ const Purchase = () => {
             id="correo"
             type="email"
             name="correo"
-            maxLength={80}
+            maxLength={60}
             value={formData.correo}
             onChange={handleChange}
             required
