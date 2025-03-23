@@ -58,8 +58,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
 // Función para verificar la firma del webhook
 function verifySignature(rawBody, signature, secret) {
-  console.log("🧮 Calculated Signature:", rawBody);
-  console.log("📬 Provided Signature:", signature);
+  console.log("Calculated Signature: ", rawBody);
+  console.log(" Provided Signature:", signature);
   console.log('verifySignature')
   const hmac = crypto.createHmac('sha256', secret);
   hmac.update(rawBody);
