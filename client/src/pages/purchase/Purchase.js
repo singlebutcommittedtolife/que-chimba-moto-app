@@ -383,7 +383,7 @@ const Purchase = () => {
       const transaction = await processPaymentWithWompi(newClient._id,newTicketPurchase.ticketNumber);
       console.log("transaction despues "+transaction)
 
-      await sendTransactionEmail(transaction);
+      await sendTransactionEmail(transaction,assignedNumbers);
   
       // Redireccionar a la página de confirmación
 
@@ -394,8 +394,7 @@ const Purchase = () => {
     }
   };
 
-  const sendTransactionEmail = async (transaction) => {
-    console.log("sendEmal")
+  const sendTransactionEmail = async (transaction,assignedNumbers) => {
 
     const emailInfo=({
       to:transaction.customerEmail,
@@ -404,18 +403,32 @@ const Purchase = () => {
       html: `
       <h1>¡Hola ${transaction.customerData.fullName}!</h1>
       <p>Tu pago ha sido procesado correctamente.</p>
-      <p>Detalles de la transacción:</p>
+
+      <strong><p>Detalles de la transacción:</p></strong>
       <ul>
-        <li><strong>Email:</strong> ${transaction.customerEmail}</li>
-        <li><strong>Monto:</strong> 
-        ${(transaction.amountInCents/100).toLocaleString("es-CO", {
-          style: "currency",
-          currency: "COP",
-        })} COP</li>
-        <li><strong>Referencia:</strong> ${transaction.reference}</li>
-        <li><strong>Estado:</strong> ${transaction.status}</li>
+        <li><strong>👤 Nombre:</strong> ${transaction?.customerData?.fullName}</li>
+        <li><strong>📧 Email:</strong>${transaction.customerEmail}</li>
+        <li><strong>🧾 Nº de Referencia:</strong> ${transaction?.reference}</li>
+        <li><strong>💳 Método de pago:</strong> ${transaction?.paymentMethod?.extra?.name}</li>
+        <li><strong>💰 Monto Total:</strong> ${(transaction.amountInCents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })} COP</li>
+        <li><strong>🕒 Fecha:</strong> ${new Date(transaction.createdAt).toLocaleString("es-CO")}</li>
       </ul>
-      <p>Gracias por tu compra en <strong>Que Chimba Moto</strong> 🏍️</p>
+
+        <div className="mt-10">
+            <p className="text-xl font-semibold mb-4">🎟️ Tus boletas:</p>
+            <div className="flex flex-wrap gap-3">
+              ${assignedNumbers.map((raffleNumber, index) => (
+                <div
+                  key={index}
+                  className="bg-yellow-100 border border-yellow-400 text-yellow-900 px-5 py-2 rounded-md font-mono shadow-sm"
+                >
+                  🎫 {raffleNumber.number}
+                </div>
+              ))}
+            </div>
+          </div>
+
+      <p>Gracias por tu compra en <strong>Que Chimba de Moto</strong> 🏍️</p>
     `,
     });
      await sendMail(emailInfo);
@@ -427,7 +440,11 @@ const Purchase = () => {
     <div>
             {loading && (
       <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-        <div className="loader"></div>
+        <div className="loader">
+
+        <p className="text-white text-lg font-semibold">Cargando...</p>
+
+        </div>
       </div>
     )}
       <Header/>

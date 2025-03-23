@@ -24,7 +24,7 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-2">Contacto</h4>
             <ul className="text-sm">
-              <li>Email: quechimbademoto@gmail.com</li>
+              <li>Email: quechimbamoto@gmail.com</li>
               <li>Teléfono: (123) 456-7890</li>
               <li>Bogotá Colombia</li>
             </ul>

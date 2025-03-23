@@ -28,7 +28,7 @@ const Confirmation = () => {
             <div><strong>📧 Email:</strong> {transaction?.customerEmail}</div>
             <div><strong>🧾 Nº de Referencia:</strong> {transaction?.reference}</div>
             <div><strong>💳 Método de pago:</strong> {transaction?.paymentMethod?.extra?.name}</div>
-            <div><strong>💰 Monto Total:</strong> {(transaction.amountInCents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })}</div>
+            <div><strong>💰 Monto Total:</strong> {(transaction.amountInCents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })} COP</div>
             <div><strong>🕒 Fecha:</strong> {new Date(transaction.createdAt).toLocaleString("es-CO")}</div>
           </div>
 
