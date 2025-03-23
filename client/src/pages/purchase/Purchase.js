@@ -412,22 +412,12 @@ const Purchase = () => {
         <li><strong>💳 Método de pago:</strong> ${transaction?.paymentMethod?.extra?.name}</li>
         <li><strong>💰 Monto Total:</strong> ${(transaction.amountInCents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })} COP</li>
         <li><strong>🕒 Fecha:</strong> ${new Date(transaction.createdAt).toLocaleString("es-CO")}</li>
-      </ul>
-
-        <div className="mt-10">
-            <p className="text-xl font-semibold mb-4">🎟️ Tus boletas:</p>
-            <div className="flex flex-wrap gap-3">
-              ${assignedNumbers.map((raffleNumber, index) => (
-                <div
-                  key={index}
-                  className="bg-yellow-100 border border-yellow-400 text-yellow-900 px-5 py-2 rounded-md font-mono shadow-sm"
-                >
-                  🎫 {raffleNumber.number}
-                </div>
-              ))}
-            </div>
-          </div>
-
+        <li><strong>🎟️ Tus boletas:</strong>
+          <ul>
+            ${assignedNumbers.map((r) => `<li>🎫 ${r.number}</li>`).join("")}
+          </ul>
+        </li>
+        </ul>
       <p>Gracias por tu compra en <strong>Que Chimba de Moto</strong> 🏍️</p>
     `,
     });
