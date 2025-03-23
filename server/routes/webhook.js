@@ -77,7 +77,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
             subject: "Confirmación de pago - Que Chimba Moto 🏍️",
             text: `Hola, tu pago ha sido procesado correctamente.`,
             html: `
-            <h1>¡Hola, tu pago ha sido procesado correctamente.!</h1>
+            <h1>¡Hola, tu pago ha sido procesado correctamente!</h1>
       
             <strong><p>Detalles de la transacción en Que Chimba de Moto:</p></strong>
             <ul>
@@ -87,7 +87,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               <li><strong>💰 Monto Total:</strong> ${(transaction.amount_in_cents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })} COP</li>
               <li><strong>🕒 Fecha:</strong> ${new Date(transaction.created_at).toLocaleString("es-CO")}</li>
             </ul>
-            <p>Gracias por tu compra en <strong>Que Chimba de Moto</strong> 🏍️</p>
+             <strong><p>Gracias por tu compra en <strong>Que Chimba de Moto</strong> 🏍️</p></strong>
           `,
           });
 

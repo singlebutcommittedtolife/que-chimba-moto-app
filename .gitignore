@@ -8,7 +8,6 @@
 /server/.npmrc
 /client/.npmrc
 /client/.npmrc
-/client/.env
 /.pnp
 .pnp.js
 
