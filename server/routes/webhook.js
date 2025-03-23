@@ -8,7 +8,7 @@ require('dotenv').config();
 // Ruta del Webhook
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
 
-  const signature = req.headers['x-wompi-signature']; // Firma enviada por Wompi
+  const signature = req.headers['X-Event-Checksum']; // Firma enviada por Wompi
   const secret = process.env.WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
   console.log('🚨 Webhook recibido');
   console.log('📦 Raw body:', req.body.toString('utf8'));
@@ -64,6 +64,8 @@ function verifySignature(rawBody, signature, secret) {
   const hmac = crypto.createHmac('sha256', secret);
   hmac.update(rawBody);
   const calculatedSignature = hmac.digest('hex');
+  console.log("Calculated Signature: ", calculatedSignature);
+
   return calculatedSignature === signature;
 }
 
