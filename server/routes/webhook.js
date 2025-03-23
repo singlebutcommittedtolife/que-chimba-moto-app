@@ -48,7 +48,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
       if (!updatedTransaction) {
         console.warn('No se encontró una transacción con esta referencia');
-        return res.status(404).json({ error: 'Transacción no encontrada' });
+       // return res.status(404).json({ error: 'Transacción no encontrada' });
       }
 
       console.log('Transacción actualizada en la base de datos:', updatedTransaction);
