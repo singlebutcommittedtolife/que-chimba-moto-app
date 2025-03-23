@@ -32,12 +32,12 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       return res.status(401).json({ error: 'Firma no válida' });
     }
 
-    const event = JSON.parse(rawBody).event; // Extraer el evento del payload
-    const transactionData = JSON.parse(rawBody).data;
+    const event = parsed.event; // Extraer el evento del payload
+    const transactionData = parsed.data;
 
     if (event === 'transaction.updated') {
-      const transaction = transactionData.transaction;
-      console.log('Transacción actualizada:', transaction);
+      const transactionBD = transactionData.transaction;
+      console.log('Transacción actualizada:', transactionBD);
 
       // Actualizar la base de datos con la transacción
       const updatedTransaction = await Transaction.findOneAndUpdate(
