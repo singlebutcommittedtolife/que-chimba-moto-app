@@ -25,7 +25,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       transaction.status,               // transaction.status
       transaction.amount_in_cents                // transaction.amount_in_cents
     ];
-    const isValid = generarChecksumWompi(properties, timestamp, secret); // Verificar firma
+    const isValid = generarChecksumWompi(properties, parsed.timestamp, secret); // Verificar firma
 
     if (!isValid) {
       console.error('Firma no válida para el webhook');
