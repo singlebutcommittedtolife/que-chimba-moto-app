@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const Transaction = require('../models/Transaction');
+require('dotenv').config();
 const axios = require('axios'); // Para Node.js
 
 // Obtener todas las transacciones
