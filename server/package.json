@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "^1.8.4",
     "backend-server": "file:",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",

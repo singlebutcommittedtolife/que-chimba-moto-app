@@ -3,7 +3,7 @@ const router = express.Router();
 const crypto = require('crypto');
 const Transaction = require('../models/Transaction');
 require('dotenv').config();
-
+const axios = require('axios');
 
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const signature = req.headers['x-event-checksum'];
@@ -89,7 +89,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           });
 
 
-          await sendTransactionEmail(emailInfo);
+          await axios.post('https://que-chimba-moto-app-production.up.railway.app/email/send', emailInfo);
           console.log('Correo de confirmación enviado con éxito');
         } catch (emailError) {
           console.error('Error al enviar el correo de confirmación:', emailError);
