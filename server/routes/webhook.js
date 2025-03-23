@@ -34,6 +34,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       console.error(' Firma no válida');
       return res.status(401).json({ error: 'Firma no válida' });
     }
+    console.log('transaction 1******************',transaction);
 
     if (parsed.event === 'transaction.updated') {
       const tx = transaction;
@@ -68,6 +69,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         console.log(' Transacción actualizada desde webhook');
       }
       if (tx.status === 'APPROVED') {
+
+        console.log('transaction 2******************',transaction);
         try {
           const emailInfo=({
             to:transaction.customerEmail,
