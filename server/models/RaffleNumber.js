@@ -4,26 +4,22 @@ const raffleNumberSchema = new mongoose.Schema({
   number: {
     type: Number,
     required: true,
-    unique: true // 🔥 Evita números duplicados en la rifa
+    unique: true // Evita números duplicados en la rifa
   },
   raffleId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Raffle",
+    type: String,
     required: true
   },
   ticketId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "TicketPurchase",
+    type: String,
     required: true
   },
   clientId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
+    type: String,
     required: true
   },
   transactionId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Transaction",
+    type: String,
     required: false // Si aún no se ha pagado, puede ser null
   },
   status: {

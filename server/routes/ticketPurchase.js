@@ -63,7 +63,6 @@ router.post('/ticket/generate-ticket', async (req, res) => {
       ticketId:ticket,
       raffleId:req.body.raffleId,
       clientId: req.body.clientId, // Proporcionado en el cuerpo de la solicitud
-      purchaseStatus: 'pendiente',
       purchaseDate: new Date()
     });
     console.log("newTicket ",newTicket)

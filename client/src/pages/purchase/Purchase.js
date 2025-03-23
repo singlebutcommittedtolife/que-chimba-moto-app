@@ -173,7 +173,6 @@ const Purchase = () => {
         raffleId,
         clientId,
         registryDate: new Date(),
-        registryUser: "chimbaMoto",
       };
   
       const newTicketPurchase = await generateTicket(ticketPurchaseData);
@@ -336,10 +335,10 @@ const Purchase = () => {
       console.log("📌 Raffle ID seleccionado:", raffleId);
      
       // Paso 2: Generar tickets
-      const { newTicketPurchase, assignedNumbers } =await generateTicketsForClient(newClient._id,raffleId);
+      const { newTicketPurchase, assignedNumbers } =await generateTicketsForClient(newClient.user.id,raffleId);
       console.log("response ticket  "+newTicketPurchase)
       // Paso 3: Procesar pago con Wompi
-      const transaction = await processPaymentWithWompi(newClient._id,newTicketPurchase.ticketId);
+      const transaction = await processPaymentWithWompi(newClient.user.id,newTicketPurchase.ticketId);
       console.log("transaction despues "+transaction)
 
       await sendTransactionEmail(transaction,assignedNumbers);

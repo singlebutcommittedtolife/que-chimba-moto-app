@@ -20,12 +20,6 @@ const ticketPurchaseSchema = new mongoose.Schema({
     required: true,
     default: Date.now
   },
-  purchaseStatus: {
-    type: String,
-    enum: ['pendiente', 'confirmado', 'ganador', 'cancelado'],
-    required: true,
-    default: 'pendiente'
-  }
 }, {
   timestamps: true
 });
