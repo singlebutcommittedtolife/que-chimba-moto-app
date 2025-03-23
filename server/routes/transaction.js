@@ -155,8 +155,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   const secret = process.env.WOMPI_PRIVATE_EVENT_KEY; // Llave privada para validación
   console.log('🚨 Webhook recibido');
   console.log('Headers:', req.headers);
-  console.log('Raw body:', req.body.toString());
-  console.log('secret 123 ', secret)
+  console.log('🧪 Tipo de rawBody:', typeof rawBody); // Debería ser 'object' (Buffer)
+  console.log('🧪 Es buffer?', Buffer.isBuffer(rawBody)); // Debería ser true
+  console.log('secret ', secret)
   try {
     const rawBody = req.body; // Esto es un Buffer gracias a express.raw
     const isValid = verifySignature(rawBody, signature, secret); // Verificar firma
@@ -197,6 +198,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
 // Función para verificar la firma del webhook
 function verifySignature(rawBody, signature, secret) {
+  console.log('verifySignature')
   const hmac = crypto.createHmac('sha256', secret);
   hmac.update(rawBody);
   const calculatedSignature = hmac.digest('hex');

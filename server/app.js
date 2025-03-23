@@ -13,8 +13,6 @@ const raffleNumberRoutes = require('./routes/raffleNumber');
 // Configurar CORS para permitir que el frontend se comunique con el backend
 app.use(cors());
 
-// Middleware para manejar JSON
-app.use(express.json());
 
 
 // Conectar a MongoDB (cambia la URL por la de tu base de datos)
@@ -35,3 +33,5 @@ app.use(transactionRoutes);  // Esta línea monta las rutas de rifas
 app.use(emailRoutes);  // Esta línea monta las rutas de rifas
 app.use(raffleNumberRoutes);  // Esta línea monta las rutas de rifas
 
+// Middleware para manejar JSON
+app.use(express.json());
