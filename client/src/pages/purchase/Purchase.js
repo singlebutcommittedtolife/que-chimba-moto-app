@@ -229,7 +229,7 @@ const Purchase = () => {
       }
   
       const transactionReference = `transaction-${Date.now()}`;
-      const amountInCents = 1500 * 100;
+      const amountInCents = totalAmount * 100;
   
       console.log("Inicializando el checkout de Wompi...");
   
