@@ -250,7 +250,7 @@ const Purchase = () => {
         return reject(error);
       }
       const integritySignature = sha256(
-        `${amountInCents}${initialTransaction.currency}${transactionReference}${integrityKey}`
+        `${transactionReference}${amountInCents}${initialTransaction.currency}${integrityKey}`
       ).toString();
       console.log("integrityKey",integrityKey)
 
