@@ -22,8 +22,8 @@ const Purchase = () => {
   const initialQuantity = parseInt(queryParams.get('quantity')) || 1;
   const [raffleNumber,setRaffleNumber] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const publicKey = process.env.REACT_APP_WOMPI_API_KEY_PUB;
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [selectedRaffles, setSelectedRaffles] = useState([]); // Inicializa como un arreglo
 
@@ -59,7 +59,7 @@ const Purchase = () => {
         ]);
         setLoading(false);
       } catch (err) {
-        setError('Error al cargar los datos de la rifa');
+        setErrorMessage('Error al cargar los datos de la rifa');
         setLoading(false);
       }
     };
@@ -224,6 +224,7 @@ const Purchase = () => {
     return new Promise(async (resolve, reject) => {
       if (!window.WidgetCheckout) {
         console.error("Wompi WidgetCheckout no está cargado en la página.");
+        setLoading(false);
         return reject(new Error("Wompi no está disponible."));
       }
   
@@ -246,7 +247,9 @@ const Purchase = () => {
         await createTransactionRecord(initialTransaction);
         console.log(" Transacción creada con estado 'CREATED'");
       } catch (error) {
+        setErrorMessage("Hubo un problema al cargar el checkout de pago. Intenta nuevamente.");
         console.error(" Error al crear la transacción inicial:", error);
+        setLoading(false);
         return reject(error);
       }
       const integritySignature = sha256(
@@ -271,6 +274,7 @@ const Purchase = () => {
         const transaction = result.transaction;
   
         if (!transaction) {
+          setLoading(false); 
           console.error(" No se recibió información de la transacción");
           return reject(new Error("No se recibió información de la transacción"));
         }
@@ -290,12 +294,16 @@ const Purchase = () => {
             console.log(" Transacción actualizada como 'APPROVED'");
             resolve(transaction);
           } catch (error) {
+            setLoading(false);
             console.error(" Error al actualizar la transacción aprobada:", error);
+            setErrorMessage("Error al actualizar la transacción aprobada. Intenta nuevamente.");
             reject(error);
           }
         } else {
+          setLoading(false);
           console.warn(` Transacción con estado: ${transaction.status}`);
           reject(new Error(`Transacción rechazada: ${transaction.status}`));
+          setErrorMessage("Hubo un problema al cargar el checkout de pago. Intenta nuevamente.");
         }
       });
     });
@@ -304,9 +312,8 @@ const Purchase = () => {
   const createTransactionRecord = async (transaction) => {
     try {
       await createTransaction(transaction);
-      console.log("Transacción registrada:", transaction);
     } catch (error) {
-      console.error("Error al registrar la transacción:", error);
+      setErrorMessage("Error al registrar la transacción");
       throw new Error("Error al registrar la transacción");
     }
   };
@@ -317,7 +324,7 @@ const Purchase = () => {
       await updateTransaction(transactionReference,updateData);
       console.log("Transacción actualizada:", transactionReference);
     } catch (error) {
-      console.error("Error al actualizar la transacción:", error);
+      setErrorMessage("Error al actualizar la transacción");
       throw new Error("Error al actualizar la transacción");
     }
   };
@@ -352,6 +359,9 @@ const Purchase = () => {
     } catch (error) {
       console.error("Error en el proceso de compra:", error.message);
       // Aquí podrías mostrar un mensaje de error al usuario
+    }
+     finally {
+      setLoading(false); // ✅ Siempre apagar el loading
     }
   };
 
@@ -536,6 +546,10 @@ const Purchase = () => {
           >
             Comprar Tickets
           </button>
+            {/* Mensaje de error si existe */}
+          {errorMessage && (
+            <p className="text-red-600 text-sm mt-2">{errorMessage}</p>
+          )}
         </div>
       </form>
       {/* Lista de Rifas Seleccionadas */}
