@@ -229,7 +229,7 @@ const Purchase = () => {
       }
   
       const transactionReference = `transaction-${Date.now()}`;
-      const amountInCents = totalAmount * 100;
+      const amountInCents = 1500 * 100;
   
       console.log("Inicializando el checkout de Wompi...");
   
@@ -242,12 +242,13 @@ const Purchase = () => {
         createdAt: new Date(),
         createdFromFrontend: true,
       };
-  
+      var createTransactionRecord=false;
       try {
         await createTransactionRecord(initialTransaction);
+        createTransactionRecord=true;
         console.log(" Transacción creada con estado 'CREATED'");
       } catch (error) {
-        setErrorMessage("Hubo un problema al cargar el checkout de pago. Intenta nuevamente.");
+        setErrorMessage("Hubo un problema al crear la transacción. Intenta nuevamente.");
         console.error(" Error al crear la transacción inicial:", error);
         setLoading(false);
         return reject(error);
@@ -281,7 +282,7 @@ const Purchase = () => {
   
         if (transaction.status === "APPROVED") {
           try {
-            // 4️⃣ Actualizar transacción con datos finales
+            // 4 Actualizar transacción con datos finales
             await updateTransactionRecord(transactionReference, {
               status: "APPROVED",
               wompiTransactionId: transaction.id,
@@ -300,6 +301,15 @@ const Purchase = () => {
             reject(error);
           }
         } else {
+                      // 4️ Actualizar transacción con datos finales
+          await updateTransactionRecord(transactionReference, {
+                        status: "ERROR",
+                        wompiTransactionId: transaction.id,
+                        clientId,
+                        ticketId,
+                        updatedAt: new Date(),
+                        updatedFromFrontend: true,
+                      });
           setLoading(false);
           console.warn(` Transacción con estado: ${transaction.status}`);
           reject(new Error(`Transacción rechazada: ${transaction.status}`));
