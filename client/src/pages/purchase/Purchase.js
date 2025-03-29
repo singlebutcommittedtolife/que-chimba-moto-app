@@ -285,8 +285,8 @@ const Purchase = () => {
             await updateTransactionRecord(transactionReference, {
               status: "APPROVED",
               wompiTransactionId: transaction.id,
-              clientId,
-              ticketId,
+              clientId:clientId,
+              ticketId:ticketId,
               updatedAt: new Date(),
               updatedFromFrontend: true,
             });

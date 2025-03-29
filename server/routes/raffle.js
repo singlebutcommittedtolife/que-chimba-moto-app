@@ -24,7 +24,7 @@ router.get('/raffles', async (req, res) => {
   });
   
   // Crear una nueva rifa
-  router.post('/', async (req, res) => {
+  router.post('/raffles', async (req, res) => {
     const { nameRaffle, description, price, startDate, endDate, drawDate, totalNumberTickets, sellTickets, statusRaffle } = req.body;
     const raffle = new Raffle({
       nameRaffle,
@@ -47,7 +47,7 @@ router.get('/raffles', async (req, res) => {
   });
   
   // Actualizar una rifa existente
-  router.put('/:id', async (req, res) => {
+  router.put('/raffles/:id', async (req, res) => {
     try {
       const updatedRaffle = await Raffle.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!updatedRaffle) return res.status(404).json({ message: 'Rifa no encontrada' });
@@ -58,7 +58,7 @@ router.get('/raffles', async (req, res) => {
   });
   
   // Eliminar una rifa
-  router.delete('/:id', async (req, res) => {
+  router.delete('/raffles/:id', async (req, res) => {
     try {
       const raffle = await Raffle.findByIdAndDelete(req.params.id);
       if (!raffle) return res.status(404).json({ message: 'Rifa no encontrada' });

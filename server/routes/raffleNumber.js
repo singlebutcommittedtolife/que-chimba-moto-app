@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const RaffleNumber = require("../models/RaffleNumber");
+const Transaction = require("../models/Transaction");
 
 
   
@@ -61,6 +62,29 @@ const RaffleNumber = require("../models/RaffleNumber");
       res.status(400).json({ message: error.message });
     }
   });
+
+  // En routes/tickets.js (por ejemplo)
+
+  router.get("/raffle-numbers/:reference", async (req, res) => {
+    const { reference } = req.params;
+
+    try {
+      const transaction = await Transaction.findOne({ reference });
+
+      if (!transaction) {
+        return res.status(404).json({ message: "Transacción no encontrada" });
+      }
+
+      const raffleNumbers = await RaffleNumber.find({ ticketId: transaction.ticketId });
+
+      res.json({ raffleNumbers });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error al obtener los raffle numbers" });
+    }
+  });
+
+module.exports = router;
 
 
 // Exportamos la instancia de la clase

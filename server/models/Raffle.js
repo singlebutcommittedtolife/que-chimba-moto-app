@@ -2,43 +2,47 @@
 const mongoose = require('mongoose');
 
 const raffleSchema = new mongoose.Schema({
-  nameRaffle: {
+  id: {
     type: String,
     required: true
+  },
+  nameRaffle: {
+    type: String,
+    required: false
   },
   description: {
     type: String,
-    required: true
+    required: false
   },
   price: {
     type: mongoose.Schema.Types.Decimal128,
-    required: true
+    required: false
   },
   startDate: {
     type: Date,
-    required: true
+    required: false
   },
   endDate: {
     type: Date,
-    required: true
+    required: false
   },
   drawDate: {
     type: Date,
-    required: true
+    required: false
   },
   totalNumberTickets: {
     type: Number,
-    required: true
+    required: false
   },
   sellTickets: {
     type: Number,
-    required: true,
+    required: false,
     default: 0
   },
   statusRaffle: {
     type: String,
     enum: ['activa', 'finalizada', 'pendiente'],
-    required: true,
+    required: false,
     default: 'activa'
   }
 }, {

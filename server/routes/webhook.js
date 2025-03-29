@@ -83,7 +83,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
             <ul>
               <li><strong>📧 Email:</strong> ${transaction.customer_email}</li>
               <li><strong>🧾 Nº de Referencia:</strong> ${transaction?.reference}</li>
-              <li><strong>💳 Método de pago:</strong> ${transaction?.payment_method?.extra?.name}</li>
+              <li><strong>💳 Método de pago:</strong> ${transaction?.payment_method?.type}</li>
               <li><strong>💰 Monto Total:</strong> ${(transaction.amount_in_cents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })} COP</li>
               <li><strong>🕒 Fecha:</strong> ${new Date(transaction.created_at).toLocaleString("es-CO")}</li>
             </ul>
