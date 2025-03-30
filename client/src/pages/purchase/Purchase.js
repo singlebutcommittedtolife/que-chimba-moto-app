@@ -599,9 +599,10 @@ const Purchase = () => {
       
     </div>
     </div>
-        <Footer />
       </>
     )}
+            <Footer />
+
   </div>
 );
 };
