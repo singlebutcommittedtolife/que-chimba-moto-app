@@ -81,7 +81,7 @@ router.post("/reserve-safe", async (req, res) => {
     // Operación atómica: solo actualiza si hay suficientes tiquetes disponibles
     const updatedRaffle = await Raffle.findOneAndUpdate(
       {
-        _id: raffleId,
+        id: raffleId,
         $expr: {
           $lte: [{ $add: ["$sellTickets", quantity] }, "$totalTickets"]
         }
