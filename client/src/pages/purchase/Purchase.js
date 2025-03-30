@@ -425,8 +425,8 @@ const Purchase = () => {
     {/* 🛑 Mostrar mensaje si las boletas ya están vendidas */}
     {isSoldOut ? (
       <div className="container mx-auto px-4 py-12 text-center">
-        <h2 className="text-2xl font-bold text-red-600">¡Todas las boletas ya están vendidas!</h2>
-        <p className="mt-4 text-gray-700">Gracias por tu interés. Muy pronto se abrirán nuevas rifas. 🔥</p>
+        <h2 className="text-2xl font-bold text-red-600">¡Todos los fondos ya están vendidas!</h2>
+        <p className="mt-4 text-gray-700">Gracias por tu interés. Muy pronto tendremos nuevos fondos disponibles. 🔥</p>
       </div>
     ) :(
       <>
