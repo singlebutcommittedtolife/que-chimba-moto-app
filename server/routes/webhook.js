@@ -70,6 +70,14 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       }
       if (tx.status === 'APPROVED') {
 
+       const assignedNumbers=await axios.get(`https://que-chimba-moto-app-production.up.railway.app/raffle-numbers/${tx.reference}`);
+       
+       const raffleSafe={
+        raffleId: assignedNumbers[0]?.raffleId,
+        quantity: assignedNumbers.length
+       }
+       await axios.post(`https://que-chimba-moto-app-production.up.railway.app/reserve-safe`,raffleSafe);
+
         console.log('transaction 2******************',transaction);
         try {
           const emailInfo=({
@@ -86,7 +94,12 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               <li><strong>💳 Método de pago:</strong> ${transaction?.payment_method?.type}</li>
               <li><strong>💰 Monto Total:</strong> ${(transaction.amount_in_cents / 100).toLocaleString("es-CO", { style: "currency", currency: "COP" })} COP</li>
               <li><strong>🕒 Fecha:</strong> ${new Date(transaction.created_at).toLocaleString("es-CO")}</li>
-            </ul>
+              <li><strong>🎟️ Tus boletas:</strong>
+                <ul>
+                  ${assignedNumbers.map((r) => `<li>🎫 ${r.number}</li>`).join("")}
+                </ul>
+              </li>
+              </ul>
              <strong><p>Gracias por tu compra en <strong>Que Chimba de Moto</strong> 🏍️</p></strong>
           `,
           });

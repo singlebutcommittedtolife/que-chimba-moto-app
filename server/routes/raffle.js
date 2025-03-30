@@ -67,5 +67,48 @@ router.get('/raffles', async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   });
+
+
+  // POST /api/raffles/reserve-safe
+router.post("/reserve-safe", async (req, res) => {
+  const { raffleId, quantity } = req.body;
+
+  if (!raffleId || !quantity) {
+    return res.status(400).json({ message: "Faltan datos: raffleId o quantity" });
+  }
+
+  try {
+    // Operación atómica: solo actualiza si hay suficientes tiquetes disponibles
+    const updatedRaffle = await Raffle.findOneAndUpdate(
+      {
+        _id: raffleId,
+        $expr: {
+          $lte: [{ $add: ["$sellTickets", quantity] }, "$totalTickets"]
+        }
+      },
+      {
+        $inc: { sellTickets: quantity }
+      },
+      {
+        new: true
+      }
+    );
+
+    if (!updatedRaffle) {
+      return res.status(400).json({ message: "No hay suficientes tiquetes disponibles" });
+    }
+
+    res.status(200).json({
+      message: `Se reservaron ${quantity} tiquetes exitosamente`,
+      sellTickets: updatedRaffle.sellTickets,
+      available: updatedRaffle.totalTickets - updatedRaffle.sellTickets
+    });
+
+  } catch (error) {
+    console.error("Error al reservar tiquetes:", error);
+    res.status(500).json({ message: "Error del servidor" });
+  }
+});
+
   
   module.exports = router;

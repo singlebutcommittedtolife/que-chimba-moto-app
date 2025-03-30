@@ -217,7 +217,7 @@ const Purchase = () => {
   };
 
 
-  const processPaymentWithWompi = (clientId, ticketId) => {
+  const processPaymentWithWompi = (clientId, ticketId,raffleId) => {
     setLoading(true);
     const integrityKey = process.env.REACT_APP_WOMPI_INTEGRITY_KEY;
 
@@ -278,15 +278,19 @@ const Purchase = () => {
           console.error(" No se recibió información de la transacción");
           return reject(new Error("No se recibió información de la transacción"));
         }
+
+        const { newTicketPurchase } =await generateTicketsForClient(clientId,raffleId);
+
   
         if (transaction.status === "APPROVED") {
+          
           try {
             // 4️⃣ Actualizar transacción con datos finales
             await updateTransactionRecord(transactionReference, {
               status: "APPROVED",
               wompiTransactionId: transaction.id,
               clientId:clientId,
-              ticketId:ticketId,
+              ticketId:newTicketPurchase.ticketId,
               updatedAt: new Date(),
               updatedFromFrontend: true,
             });
@@ -345,10 +349,10 @@ const Purchase = () => {
       console.log("📌 Raffle ID seleccionado:", raffleId);
      
       // Paso 2: Generar tickets
-      const { newTicketPurchase, assignedNumbers } =await generateTicketsForClient(newClient.user.id,raffleId);
-      console.log("response ticket  "+newTicketPurchase)
+      //const { newTicketPurchase } =await generateTicketsForClient(newClient.user.id,raffleId);
+      //console.log("response ticket  "+newTicketPurchase)
       // Paso 3: Procesar pago con Wompi
-      const transaction = await processPaymentWithWompi(newClient.user.id,newTicketPurchase.ticketId);
+      const {transaction, assignedNumbers }= await processPaymentWithWompi(newClient.user.id,raffleId);
       console.log("transaction despues "+transaction)
 
       //await sendTransactionEmail(transaction,assignedNumbers);
