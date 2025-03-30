@@ -407,8 +407,9 @@ const Purchase = () => {
 
   }
 
-  const isSoldOut = selectedRaffles[0]?.sellTickets === selectedRaffles[0]?.totalNumberTickets;
-
+  const isSoldOut =
+  selectedRaffles.length > 0 &&
+  selectedRaffles[0].sellTickets === selectedRaffles[0].totalNumberTickets;
   return (
     <div>
       {loading && (
