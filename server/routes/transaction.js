@@ -56,8 +56,10 @@ router.post('/create-transaction', async (req, res) => {
   try {
     const newTransaction = new Transaction (req.body);
     await newTransaction.save();
+    console.log("Transaccion creada correctamente", newTransaction)
     res.status(201).json(newTransaction);
   } catch (error) {
+    console.log("Error al crear la transacción". error.message)
     res.status(400).json({ message: error.message });
   }
 });
