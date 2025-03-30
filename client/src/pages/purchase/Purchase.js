@@ -231,13 +231,17 @@ const Purchase = () => {
       const amountInCents = totalAmount * 100;
   
       console.log("Inicializando el checkout de Wompi...");
-  
+      const {  newTicketPurchase, assignedNumbers } =await generateTicketsForClient(clientId,raffleId);
+      console.log("generateTicketsForClient",newTicketPurchase)
+      console.log("generateTicketsForClient",assignedNumbers)
+      
       // 1️ Crear la transacción inmediatamente al abrir el modal
       const initialTransaction = {
         reference: transactionReference,
         amount: amountInCents,
         currency: "COP",
         status: "CREATED",
+        ticketId:newTicketPurchase.ticketId,
         createdAt: new Date(),
         createdFromFrontend: true,
       };
@@ -279,10 +283,6 @@ const Purchase = () => {
           console.error(" No se recibió información de la transacción");
           return reject(new Error("No se recibió información de la transacción"));
         }
-
-        const {  newTicketPurchase, assignedNumbers } =await generateTicketsForClient(clientId,raffleId);
-        console.log("generateTicketsForClient",newTicketPurchase)
-        console.log("generateTicketsForClient",assignedNumbers)
 
         if (transaction.status === "APPROVED") {
           
