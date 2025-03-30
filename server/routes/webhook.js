@@ -69,13 +69,15 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         console.log(' Transacción actualizada desde webhook');
       }
       if (tx.status === 'APPROVED') {
-
+      
+        console.log("tx.reference",tx.reference)
        const assignedNumbers=await axios.get(`https://que-chimba-moto-app-production.up.railway.app/raffle-numbers/${tx.reference}`);
        
        const raffleSafe={
         raffleId: assignedNumbers[0]?.raffleId,
         quantity: assignedNumbers.length
        }
+       c
        await axios.post(`https://que-chimba-moto-app-production.up.railway.app/reserve-safe`,raffleSafe);
 
         console.log('transaction 2******************',transaction);

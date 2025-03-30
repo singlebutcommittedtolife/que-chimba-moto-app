@@ -199,7 +199,6 @@ const Purchase = () => {
           console.log(` Número de rifa asignado: ${assignedRaffleNumber.number}`);
           assignedNumbers.push(assignedRaffleNumber);
           console.log("assignedNumbers ",assignedNumbers)
-          console.log("assignedNumbers ",assignedNumbers.assignedRaffleNumber)
 
         } catch (error) {
           console.error(" Error al asignar un número de rifa purchase: ", error);
@@ -272,7 +271,8 @@ const Purchase = () => {
       // 3️ Abrir el modal y esperar resultado
       checkout.open(async (result) => {
         const transaction = result.transaction;
-  
+        console.log("checkout",transaction)
+
         if (!transaction) {
           setLoading(false); 
           console.error(" No se recibió información de la transacción");
