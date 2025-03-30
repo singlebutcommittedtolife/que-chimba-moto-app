@@ -102,7 +102,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               <li><strong>🕒 Fecha:</strong> ${new Date(transaction.created_at).toLocaleString("es-CO")}</li>
               <li><strong>🎟️ Tus boletas:</strong>
                 <ul>
-                  ${assignedNumbers.map((r) => `<li>🎫 ${r.number}</li>`).join("")}
+                  ${assignedNumbers.raffleNumbers.map((r) => `<li>🎫 ${r.number}</li>`).join("")}
                 </ul>
               </li>
               </ul>
