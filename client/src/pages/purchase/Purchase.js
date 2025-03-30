@@ -217,7 +217,7 @@ const Purchase = () => {
   };
 
 
-  const processPaymentWithWompi = (clientId, ticketId,raffleId) => {
+  const processPaymentWithWompi = (clientId,raffleId) => {
     setLoading(true);
     const integrityKey = process.env.REACT_APP_WOMPI_INTEGRITY_KEY;
 
@@ -264,7 +264,7 @@ const Purchase = () => {
         amountInCents: amountInCents,
         reference: transactionReference,
         publicKey: publicKey,
-        signature: {integrity : integritySignature}
+        //signature: {integrity : integritySignature}
       });
   
       console.log(" Checkout inicializado. Mostrando modal de pago...");
