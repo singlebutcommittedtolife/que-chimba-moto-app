@@ -243,6 +243,7 @@ const Purchase = () => {
       };
   
       try {
+        console.log("initialTransaction",initialTransaction)
         await createTransactionRecord(initialTransaction);
         console.log(" Transacción creada con estado 'CREATED'");
       } catch (error) {
