@@ -83,7 +83,7 @@ router.post("/reserve-safe", async (req, res) => {
       {
         id: raffleId,
         $expr: {
-          $lte: [{ $add: ["$sellTickets", quantity] }, "$totalTickets"]
+          $lte: [{ $add: ["$sellTickets", quantity] }, "$totalNumberTickets"]
         }
       },
       {
