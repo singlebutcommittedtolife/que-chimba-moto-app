@@ -54,5 +54,14 @@
   animation: spin 1s linear infinite;
 }
 
+.sold-out-message {
+  padding: 1rem;
+  background-color: #ffe0e0;
+  color: #b00000;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+}
+
 
 
