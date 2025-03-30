@@ -71,9 +71,11 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       if (tx.status === 'APPROVED') {
       
         console.log("tx.reference",tx.reference)
-       const assignedNumbers=await axios.get(`https://que-chimba-moto-app-production.up.railway.app/raffle-numbers/${tx.reference}`);
+       const response=await axios.get(`https://que-chimba-moto-app-production.up.railway.app/raffle-numbers/${tx.reference}`);
        
-       console.log("assignedNumbers ", assignedNumbers)
+       const assignedNumbers = response.data;
+
+       console.log("assignedNumbers", assignedNumbers);
        const raffleSafe={
         raffleId: assignedNumbers[0]?.raffleId,
         quantity: assignedNumbers.length
