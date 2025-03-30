@@ -77,8 +77,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
        console.log("assignedNumbers", assignedNumbers);
        const raffleSafe={
-        raffleId: assignedNumbers[0]?.raffleId,
-        quantity: assignedNumbers.length
+        raffleId: assignedNumbers.raffleNumbers[0]?.raffleId,
+        quantity: assignedNumbers.raffleNumbers.length
        }
        console.log("raffleSafe ", raffleSafe)
 
