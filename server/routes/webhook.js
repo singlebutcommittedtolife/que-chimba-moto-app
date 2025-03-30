@@ -77,7 +77,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         raffleId: assignedNumbers[0]?.raffleId,
         quantity: assignedNumbers.length
        }
-       c
+       
        await axios.post(`https://que-chimba-moto-app-production.up.railway.app/reserve-safe`,raffleSafe);
 
         console.log('transaction 2******************',transaction);
