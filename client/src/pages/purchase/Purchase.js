@@ -272,7 +272,7 @@ const Purchase = () => {
       // 3️ Abrir el modal y esperar resultado
       checkout.open(async (result) => {
         const transaction = result.transaction;
-        console.log("checkout",transaction)
+        console.log("checkout trx ",transaction)
 
         if (!transaction) {
           setLoading(false); 
@@ -280,9 +280,10 @@ const Purchase = () => {
           return reject(new Error("No se recibió información de la transacción"));
         }
 
-        const { newTicketPurchase } =await generateTicketsForClient(clientId,raffleId);
+        const {  newTicketPurchase, assignedNumbers } =await generateTicketsForClient(clientId,raffleId);
+        console.log("generateTicketsForClient",newTicketPurchase)
+        console.log("generateTicketsForClient",assignedNumbers)
 
-  
         if (transaction.status === "APPROVED") {
           
           try {
@@ -297,7 +298,12 @@ const Purchase = () => {
             });
   
             console.log(" Transacción actualizada como 'APPROVED'");
-            resolve(transaction);
+            console.log(" Transacción actualizada como 'APPROVED'", transaction);
+
+            resolve({
+              transaction,
+              assignedNumbers
+            })
           } catch (error) {
             setLoading(false);
             console.error(" Error al actualizar la transacción aprobada:", error);
