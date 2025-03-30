@@ -76,7 +76,7 @@ const Transaction = require("../models/Transaction");
       }
 
       const raffleNumbers = await RaffleNumber.find({ ticketId: transaction.ticketId });
-
+      console.log("raffleNumbers",raffleNumbers)
       res.json({ raffleNumbers });
     } catch (error) {
       console.error(error);
