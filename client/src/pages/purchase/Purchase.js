@@ -269,7 +269,7 @@ const Purchase = () => {
         amountInCents: amountInCents,
         reference: transactionReference,
         publicKey: publicKey,
-        //signature: {integrity : integritySignature}
+        signature: {integrity : integritySignature}
       });
   
       console.log(" Checkout inicializado. Mostrando modal de pago...");
