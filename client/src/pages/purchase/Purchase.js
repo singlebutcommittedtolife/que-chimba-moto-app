@@ -425,7 +425,7 @@ const Purchase = () => {
     {/* 🛑 Mostrar mensaje si las boletas ya están vendidas */}
     {isSoldOut ? (
       <div className="container mx-auto px-4 py-12 text-center">
-        <h2 className="text-2xl font-bold text-red-600">¡Todos los fondos ya están vendidas!</h2>
+        <h2 className="text-2xl font-bold text-red-600">¡Todas las boletas ya están vendidas!</h2>
         <p className="mt-4 text-gray-700">Gracias por tu interés. Muy pronto tendremos nuevos fondos disponibles. 🔥</p>
       </div>
     ) :(
@@ -575,7 +575,7 @@ const Purchase = () => {
       </form>
       {/* Lista de Rifas Seleccionadas */}
       <div className="order-1 lg:order-2 lg:w-1/2 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
-      <h2 className="text-xl font-bold mb-4">Tus Fondos Seleccionados</h2>
+      <h2 className="text-xl font-bold mb-4">Tus Boletas Seleccionados</h2>
       {selectedRaffles.map((raffle) => (
           <div key={raffle.id} className="flex items-center justify-between mb-4">
             <span>{raffle.name}</span>
@@ -588,7 +588,6 @@ const Purchase = () => {
               </button>
               <span className="mx-2">{raffle.quantity}</span>
               <button onClick={() => handleQuantityChange(raffle.id, raffle.quantity + 1)} className="bg-gray-200 px-2 py-1 rounded">+</button>
-              <button onClick={() => handleRemoveRaffle(raffle.id)} className="ml-4 text-red-500">Eliminar</button>
             </div>
           </div>
         ))}

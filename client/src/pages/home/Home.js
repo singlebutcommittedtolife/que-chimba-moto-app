@@ -12,7 +12,7 @@ const TicketButton = ({ quantity, price }) => (
     to={`/purchase?quantity=${quantity}`} 
     className="bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300 text-sm"
   >
-    Comprar {quantity} fondo{quantity > 1 ? 's' : ''} - ${(price* quantity).toLocaleString()}
+    Comprar {quantity} boleta{quantity > 1 ? 's' : ''} - ${(price* quantity).toLocaleString()}
   </Link>
 );
 
@@ -88,7 +88,7 @@ const Home = () => {
           </Slider>
         </div>
             <div className="p-16">
-            <p className="text-xl text-center text-gray-600 mb-6">¡Compra tus fondos de moto!</p>
+            <p className="text-xl text-center text-gray-600 mb-6">¡Compra tus boletas de moto!</p>
 
               <div className="uppercase tracking-wide text-sm text-blue-600 font-semibold">{activeRaffle.name}</div>
               <p className="mt-2 text-gray-500">{activeRaffle.description}</p>
@@ -102,7 +102,7 @@ const Home = () => {
                   <TicketButton quantity={6} price={activeRaffle.price}  />
                 </div>
                 <Link to="/purchase" className="block text-center bg-teal-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300">
-                  Comprar más fondos
+                  Comprar más boletas
                 </Link>
               </div>
             </div>
