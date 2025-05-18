@@ -592,7 +592,7 @@ const Purchase = () => {
           </div>
         ))}
 
-        <p className="text-lg font-bold mt-4">Total a pagar: ${totalAmount.toLocaleString()}</p>
+        <p className="text-lg font-bold mt-4">Total a pagar: ${totalAmount.toLocaleString() }</p>
       </div>
 
       
