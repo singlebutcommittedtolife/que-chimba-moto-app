@@ -92,9 +92,11 @@ const Home = () => {
 
               <div className="uppercase tracking-wide text-sm text-blue-600 font-semibold">{activeRaffle.name}</div>
               <p className="mt-2 text-gray-500">{activeRaffle.description}</p>
+              <p className="mt-2 text-gray-500">Diligencia tus datos, realiza el pago en la pasarela y recibirás tus boletas directamente en tu correo.</p>
               <p className="mt-2 text-gray-500 inline">Precio:</p>
               <p className="mt-2 text-l text-blue-600 inline ml-2">  ${activeRaffle.price ? activeRaffle.price.toLocaleString() : 'Cargando...'}
               </p>
+              <p className="mt-2 text-gray-500">Importante: revisa también tu bandeja de correo no deseado. </p>
               <div className="mt-6 space-y-4">
                 <div className="flex flex-wrap gap-2">
                   <TicketButton quantity={2} price={activeRaffle.price}  />
