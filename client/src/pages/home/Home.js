@@ -80,7 +80,7 @@ const Home = () => {
                   <img 
                     src={img} 
                     alt={`Moto ${index + 1}`} 
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-center "
                   />
                 </div>
               </div>
