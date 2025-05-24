@@ -37,7 +37,13 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
     console.log('transaction 1******************',transaction);
 
     if (parsed.event === 'transaction.updated') {
+
       const tx = transaction;
+
+      if (!tx.reference.startsWith("transactionQCM")) {
+        console.warn("Transacción ignorada: no pertenece a esta aplicación");
+        return res.sendStatus(200);
+      }
       console.log(' Transacción del evento:', tx);
 
       const updatedTransaction = await Transaction.findOneAndUpdate(

@@ -106,12 +106,6 @@ const Purchase = () => {
     );
   };
 
-
-
-  const handleRemoveRaffle = (id) => {
-    setSelectedRaffles(prevRaffles => prevRaffles.filter(raffle => raffle.id !== id));
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     
@@ -228,7 +222,7 @@ const Purchase = () => {
         return reject(new Error("Wompi no está disponible."));
       }
   
-      const transactionReference = `transaction-${Date.now()}`;
+      const transactionReference = `transactionQCM-${Date.now()}`;
       const amountInCents = totalAmount * 100;
   
       console.log("Inicializando el checkout de Wompi...");

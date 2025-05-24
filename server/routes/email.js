@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post('/email/send', async (req, res) => {
   try {
-    console.log("req.body michelle "+req.body)
+    console.log("req.body sendEmail "+req.body)
     const { to, subject, text, html } = req.body;
     console.log("server "+to)
     if (!to || !subject || (!text && !html)) {
@@ -13,7 +13,9 @@ router.post('/email/send', async (req, res) => {
 
     // ✅ Llamar a la función correctamente con `await`
     const result = await sendEmail(to, subject, text, html);
-
+    // 📬 Confirmación de envío
+    console.log("✅ Correo enviado con éxito a:", to);
+    console.log("📤 Resultado del envío:", result);
     res.json(result);
   } catch (error) {
     console.error('Error en el endpoint de correo:', error);
