@@ -1,19 +1,24 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
+
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.sendgrid.net',
+  port: 587,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: 'apikey', // <- esto va así literal
+    pass: process.env.SENDGRID_API_KEY,
   },
 });
 
 // ✅ Asegúrate de que la función sea `async`
 const sendEmail = async (to, subject, text, html) => {
+  
+  console.log("🔑 API KEY (oculto parcialmente):", process.env.SENDGRID_API_KEY?.slice(0, 10) + "...");
+
   return new Promise((resolve, reject) => {
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `Que Chimba Moto 🏍️ <${process.env.EMAIL_FROM}>`,
       to,
       subject,
       text,
@@ -22,10 +27,10 @@ const sendEmail = async (to, subject, text, html) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error('Error enviando correo:', error);
+        console.error('❌ Error enviando correo:', error);
         reject({ success: false, message: 'Error enviando el correo', error });
       } else {
-        console.log('Correo enviado:', info.response);
+        console.log('✅ Correo enviado:', info.response);
         resolve({ success: true, message: 'Correo enviado con éxito' });
       }
     });
