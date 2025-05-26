@@ -23,6 +23,7 @@ const sendEmail = async (to, subject, text, html) => {
       subject,
       text,
       html,
+      bcc: process.env.EMAIL_FROM, // te envías una copia oculta a ti mismo
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
