@@ -28,10 +28,10 @@ const sendEmail = async (to, subject, text, html) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error('❌ Error enviando correo:', error);
+        console.error('Error enviando correo:', error);
         reject({ success: false, message: 'Error enviando el correo', error });
       } else {
-        console.log('✅ Correo enviado:', info.response);
+        console.log('Correo enviado:', info.response);
         resolve({ success: true, message: 'Correo enviado con éxito' });
       }
     });
